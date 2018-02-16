@@ -18,11 +18,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="swapper.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="swapper.cpp">
+    <ClCompile Include="SwapHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SwapHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
