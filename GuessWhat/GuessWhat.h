@@ -5,22 +5,29 @@
 class GuessWhat
 {
 private:
-	const int MAX_GUESSES = 5;
-	const int WORD_LENGTH = 5;
+	int MAX_GUESSES = 5;
+	int WORD_LENGTH = 5;
 	SecretWord mWordToGuess;
 	std::string mUsersGuess;
 	int mGuessesLeft = MAX_GUESSES;
 	int mBulls = 0;
 	int mCows = 0;
+	int mDifficulty = 0;
 	bool mPlay = true;
+	bool mIsoMode = true;
+	bool mWin = false;
 	
-	void printIntro();
-	void reset();
-	void checkPlayAgain();
+	bool checkValidGuess();
+	void printModeAndDifficulty();
+
 
 public:
 	GuessWhat();
 	~GuessWhat();
 
 	void run();
+	void setModeAndDifficulty(int &mode, int &difficulty);
+	void reset();
+
+	const bool& getWin() const;
 };
