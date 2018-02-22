@@ -18,7 +18,7 @@ private:
 
 	std::array<std::string, 10> mTenLetterWordsIso{ "pathfinder","aftershock","formidable","trampoline","subjection","blacksmith","downstream","timberland","shoplifter","slumbering" };
 	std::array<std::string, 10> mTenLetterWords{ "additional","compassion","monolithic","leadership","rendezvous","heartbreak","wavelength","earthquake","particular","waterproof" };
-	
+
 	std::string mWord = "";
 
 	std::string makeCowsString(const std::vector<int> &indecies, std::string &word) const;
@@ -28,7 +28,7 @@ public:
 	~SecretWord();
 
 	void checkLikeness(std::string &userGuess, int &bulls, int &cows);
-	
+
 	void checkLikenessNonIso(std::string &userGuess, int &bulls, int &cows);
 	void checkCows(std::string &cowsLeft, std::string &guessCows, int& GuessIndex, int &cows);
 

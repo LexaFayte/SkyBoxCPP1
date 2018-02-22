@@ -118,11 +118,11 @@
     <ClCompile Include="GuessWhat.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SecretWord.cpp" />
-    <ClCompile Include="SecretWord.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GuessWhat.h" />
+    <ClInclude Include="SecretWord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
