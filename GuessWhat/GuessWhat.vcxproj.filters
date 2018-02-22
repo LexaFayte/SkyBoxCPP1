@@ -18,21 +18,21 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GuessWhat.cpp">
+    <ClCompile Include="SecretWord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SecretWord.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SecretWord.cpp">
+    <ClCompile Include="GuessWhat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GuessWhat.h">
+    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
+    <ClInclude Include="SecretWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuessWhat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

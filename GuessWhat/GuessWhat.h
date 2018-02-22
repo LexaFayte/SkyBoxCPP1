@@ -16,7 +16,7 @@ private:
 	bool mPlay = true;
 	bool mIsoMode = true;
 	bool mWin = false;
-	
+
 	bool checkValidGuess();
 	void printModeAndDifficulty();
 

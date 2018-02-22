@@ -1,6 +1,6 @@
 #include "SecretWord.h"
 
-SecretWord::SecretWord(){ srand(time(0));};
+SecretWord::SecretWord() { srand(time(0)); };
 SecretWord::~SecretWord() {};
 
 void SecretWord::checkLikeness(std::string &userGuess, int &bulls, int &cows)
@@ -11,7 +11,7 @@ void SecretWord::checkLikeness(std::string &userGuess, int &bulls, int &cows)
 		{
 			bulls++;
 		}
-		else if(mWord.find(*itGuess, 0) != std::string::npos)
+		else if (mWord.find(*itGuess, 0) != std::string::npos)
 		{
 			cows++;
 		}
@@ -20,8 +20,8 @@ void SecretWord::checkLikeness(std::string &userGuess, int &bulls, int &cows)
 
 std::string SecretWord::makeCowsString(const std::vector<int> &indecies, std::string &word) const
 {
-	std::string toReturn(indecies.size(),'e');
-	for(int i = 0; i < indecies.size(); ++i)
+	std::string toReturn(indecies.size(), 'e');
+	for (int i = 0; i < indecies.size(); ++i)
 	{
 		toReturn[i] = word[indecies[i]];
 	}
@@ -50,7 +50,9 @@ const std::string& SecretWord::getCurrentWord()
 void SecretWord::checkLikenessNonIso(std::string &userGuess, int &bulls, int &cows)
 {
 	std::vector<int> possibleCowIndecies;
+	possibleCowIndecies.reserve(mWord.size());
 	std::vector<int> bullIndecies;
+	bullIndecies.reserve(mWord.size());
 	for (auto itGuess = userGuess.begin(), itWord = mWord.begin(); itWord < mWord.end(); ++itWord, ++itGuess)
 	{
 		if (*itWord == *itGuess)
@@ -99,43 +101,43 @@ void SecretWord::checkCows(std::string &cowsLeft, std::string &guessCows, int &G
 	}
 
 	checkCows(cowsLeft, guessCows, GuessIndex, cows);
-	
+
 }
 
 void SecretWord::setWord(bool& iso, int &difficulty)
 {
 	switch (difficulty)
 	{
-		case 1:
-			if (iso)
-			{
-				mWord = mFiveLetterWordsIso[(rand() % MAX_WORDS)];
-			}
-			else
-			{
-				mWord = mFiveLetterWords[(rand() % MAX_WORDS)];
-			}
-			break;
-		case 2:
-			if (iso)
-			{
-				mWord = mSevenLetterWordsIso[(rand() % MAX_WORDS)];
-			}
-			else
-			{
-				mWord = mSevenLetterWords[(rand() % MAX_WORDS)];
-			}
-			break;
-		case 3:
-			if (iso)
-			{
-				mWord = mTenLetterWordsIso[(rand() % MAX_WORDS)];
-			}
-			else
-			{
-				mWord = mTenLetterWords[(rand() % MAX_WORDS)];
-			}
-			break;
+	case 1:
+		if (iso)
+		{
+			mWord = mFiveLetterWordsIso[(rand() % MAX_WORDS)];
+		}
+		else
+		{
+			mWord = mFiveLetterWords[(rand() % MAX_WORDS)];
+		}
+		break;
+	case 2:
+		if (iso)
+		{
+			mWord = mSevenLetterWordsIso[(rand() % MAX_WORDS)];
+		}
+		else
+		{
+			mWord = mSevenLetterWords[(rand() % MAX_WORDS)];
+		}
+		break;
+	case 3:
+		if (iso)
+		{
+			mWord = mTenLetterWordsIso[(rand() % MAX_WORDS)];
+		}
+		else
+		{
+			mWord = mTenLetterWords[(rand() % MAX_WORDS)];
+		}
+		break;
 
 	default:
 		break;

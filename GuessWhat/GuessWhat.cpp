@@ -8,7 +8,7 @@ GuessWhat::~GuessWhat() {};
 
 
 void GuessWhat::run()
-{		
+{
 	printModeAndDifficulty();
 
 	while (mGuessesLeft >= 1)
@@ -76,7 +76,7 @@ bool GuessWhat::checkValidGuess()
 		std::cout << "\ninvalid input; the word must be " << WORD_LENGTH << " letters long\n" << std::endl;
 		return false;
 	}
-	
+
 	std::transform(mUsersGuess.begin(), mUsersGuess.end(), mUsersGuess.begin(), ::tolower);
 
 	if (mIsoMode)
@@ -103,33 +103,33 @@ void GuessWhat::setModeAndDifficulty(int &mode, int &difficulty)
 {
 	switch (mode)
 	{
-		case 1:
-			mIsoMode = true;
-			break;
-		case 2:
-			mIsoMode = false;
-			break;
-		default:
-			break;
+	case 1:
+		mIsoMode = true;
+		break;
+	case 2:
+		mIsoMode = false;
+		break;
+	default:
+		break;
 	}
 
 	mDifficulty = difficulty;
 	switch (difficulty)
 	{
-		case 1:
-			MAX_GUESSES = 5;
-			WORD_LENGTH = 5;
-			break;
-		case 2:
-			MAX_GUESSES = 7;
-			WORD_LENGTH = 7;
-			break;
-		case 3:
-			MAX_GUESSES = 10;
-			WORD_LENGTH = 10;
-			break;
-		default:
-			break;
+	case 1:
+		MAX_GUESSES = 5;
+		WORD_LENGTH = 5;
+		break;
+	case 2:
+		MAX_GUESSES = 7;
+		WORD_LENGTH = 7;
+		break;
+	case 3:
+		MAX_GUESSES = 10;
+		WORD_LENGTH = 10;
+		break;
+	default:
+		break;
 	}
 
 	mWordToGuess.setWord(mIsoMode, mDifficulty);
