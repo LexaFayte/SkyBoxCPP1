@@ -1,6 +1,12 @@
 #include "SecretWord.h"
 
-SecretWord::SecretWord() { srand(time(0)); };
+SecretWord::SecretWord() 
+{
+	srand(time(0));
+	mPossibleCowIndices.reserve(MAX_WORD_SIZE);
+	mBullIndices.reserve(MAX_WORD_SIZE);
+};
+
 SecretWord::~SecretWord() {};
 
 void SecretWord::checkLikeness(std::string &userGuess, int &bulls, int &cows)
@@ -18,24 +24,24 @@ void SecretWord::checkLikeness(std::string &userGuess, int &bulls, int &cows)
 	}
 }
 
-std::string SecretWord::makeCowsString(const std::vector<int> &indecies, std::string &word) const
+std::string SecretWord::makeCowsString(const std::vector<int> &indices, std::string &word) const
 {
-	std::string toReturn(indecies.size(), 'e');
-	for (int i = 0; i < indecies.size(); ++i)
+	std::string toReturn(indices.size(), 'e');
+	for (int i = 0; i < indices.size(); ++i)
 	{
-		toReturn[i] = word[indecies[i]];
+		toReturn[i] = word[indices[i]];
 	}
 
 	return toReturn;
 }
 
-std::string SecretWord::makeNonBullString(const std::vector<int> &indecies, std::string &word) const
+std::string SecretWord::makeNonBullString(const std::vector<int> &indices, std::string &word) const
 {
 	std::string toReturn = word;
 	int erasedOffset = 0;
-	for (int i = 0; i < indecies.size(); ++i)
+	for (int i = 0; i < indices.size(); ++i)
 	{
-		toReturn.erase(toReturn.begin() + (indecies[i] - erasedOffset));
+		toReturn.erase(toReturn.begin() + (indices[i] - erasedOffset));
 		erasedOffset++;
 	}
 
@@ -49,27 +55,26 @@ const std::string& SecretWord::getCurrentWord()
 
 void SecretWord::checkLikenessNonIso(std::string &userGuess, int &bulls, int &cows)
 {
-	std::vector<int> possibleCowIndecies;
-	possibleCowIndecies.reserve(mWord.size());
-	std::vector<int> bullIndecies;
-	bullIndecies.reserve(mWord.size());
+	mPossibleCowIndices.clear();
+	mBullIndices.clear();
+
 	for (auto itGuess = userGuess.begin(), itWord = mWord.begin(); itWord < mWord.end(); ++itWord, ++itGuess)
 	{
 		if (*itWord == *itGuess)
 		{
 			bulls++;
-			bullIndecies.push_back(std::distance(mWord.begin(), itWord));
+			mBullIndices.push_back(std::distance(mWord.begin(), itWord));
 		}
 		else if (mWord.find(*itGuess, 0) != std::string::npos)
 		{
-			possibleCowIndecies.push_back(std::distance(mWord.begin(), itWord));
+			mPossibleCowIndices.push_back(std::distance(mWord.begin(), itWord));
 		}
 	}
 
-	if (possibleCowIndecies.size() > 0)
+	if (mPossibleCowIndices.size() > 0)
 	{
-		std::string wordNonBullString = makeNonBullString(bullIndecies, mWord);
-		std::string guessCowsString = makeCowsString(possibleCowIndecies, userGuess);
+		std::string wordNonBullString = makeNonBullString(mBullIndices, mWord);
+		std::string guessCowsString = makeCowsString(mPossibleCowIndices, userGuess);
 		int guessIndex = 0;
 		checkCows(wordNonBullString, guessCowsString, guessIndex, cows);
 	}

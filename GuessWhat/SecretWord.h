@@ -9,6 +9,7 @@ class SecretWord
 {
 private:
 	const int MAX_WORDS = 10;
+	const int MAX_WORD_SIZE = 10;
 
 	std::array<std::string, 10> mFiveLetterWordsIso{ "quake","super","crime","laser","virus","shift","trade","storm","canid","lucky" };
 	std::array<std::string, 10> mFiveLetterWords{ "apple","error","order","paper","legal","elite","coach","aware","river","sense" };
@@ -18,6 +19,9 @@ private:
 
 	std::array<std::string, 10> mTenLetterWordsIso{ "pathfinder","aftershock","formidable","trampoline","subjection","blacksmith","downstream","timberland","shoplifter","slumbering" };
 	std::array<std::string, 10> mTenLetterWords{ "additional","compassion","monolithic","leadership","rendezvous","heartbreak","wavelength","earthquake","particular","waterproof" };
+
+	std::vector<int> mPossibleCowIndices;
+	std::vector<int> mBullIndices;
 
 	std::string mWord = "";
 
