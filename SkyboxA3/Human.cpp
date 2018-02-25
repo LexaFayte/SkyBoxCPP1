@@ -5,6 +5,8 @@ Human::Human()
 
 };
 
+Human::~Human() {};
+
 Human::Human(std::string name, int beltSize, std::string colour) : mName(name),
 mBelt(beltSize), mShoes(colour)
 {
