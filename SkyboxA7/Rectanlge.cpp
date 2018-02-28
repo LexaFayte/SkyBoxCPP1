@@ -4,11 +4,9 @@
 
 Rectangle::Rectangle(std::string name, float width, float height)
 	: TwoDimensional(name)
-	, mWidth(0.0f)
-	, mHeight(0.0f)
+	, mWidth(width)
+	, mHeight(height)
 {
-	SetWidth(width);
-	SetHeight(height);
 }
 
 Rectangle::~Rectangle()

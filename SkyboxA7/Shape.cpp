@@ -14,7 +14,7 @@ void Shape::Print()
 
 float Shape::BelowZeroCheck(float number)
 {
-	if (number > 0.0f)
+	if (number < 0.0f)
 	{
 		cout << "ERROR - " << number << " Invaild. " << endl;
 		return 0.0f;

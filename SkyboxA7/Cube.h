@@ -19,8 +19,8 @@ public:
 	float GetHeight() { return mHeight; }
 	float GetDepth() { return mDepth; }
 
-	float GetVolume() override { return 10.0f; }
-	float GetSurfaceArea() override { return (2.0f * mWidth * mHeight) + (2.0f * mHeight * mDepth) + (2.0f * mWidth * mDepth); }
+	float GetVolume() override { return std::powf(mHeight,3); }
+	float GetSurfaceArea() override { return 6.0f * std::powf(mHeight,2); }
 
 	void Print() override;
 

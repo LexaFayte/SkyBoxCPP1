@@ -20,3 +20,8 @@ float TwoDimensional::GetPerimeter()
 {
 	return 0.0;
 }
+
+void TwoDimensional::Print()
+{
+	//empty
+}

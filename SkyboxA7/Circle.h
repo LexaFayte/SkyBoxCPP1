@@ -16,10 +16,10 @@ public:
 	void SetRadius(float radius);
 	float GetRadius() { return mRadius; }
 
-	float GetArea() override { return mPie * mRadius * mRadius; }
+	float GetArea() override { return mPie * (mRadius * mRadius); }
 	float GetPerimeter() override { return 2.0f * mPie * mRadius; }
 
-	void print();
+	void Print() override;
 
 private:
 	float mRadius;
