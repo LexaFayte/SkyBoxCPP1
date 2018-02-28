@@ -14,8 +14,8 @@ public:
 	void SetRadius(float radius);
 	float GetRadius() const { return mRadius; }
 
-	float GetVolume() override { return 4.0f * mPie * mRadius * mRadius * mRadius / 3.0f; }
-	float GetSurfaceArea() override { return 4.0f * mPie * mRadius * mRadius; }
+	float GetVolume() override { return 4.0f * mPie * ((std::powf(mRadius, 3)) / 3.0f); }
+	float GetSurfaceArea() override { return 4.0f * mPie * (std::powf(mRadius,2)); }
 
 	void Print() override;
 

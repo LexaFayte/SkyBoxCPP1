@@ -19,7 +19,7 @@ void Circle::SetRadius(float radius)
 	mRadius = BelowZeroCheck(radius);
 }
 
-void Circle::print()
+void Circle::Print()
 {
 	std::cout << "Perimeter: " << GetPerimeter() << std::endl;
 	std::cout << "Area: " << GetArea() << std::endl;

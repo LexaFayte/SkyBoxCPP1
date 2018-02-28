@@ -1,5 +1,5 @@
 #ifndef TWO_DIMENSIONAL_H
-#define TWODIMENSIONAL_H
+#define TWO_DIMENSIONAL_H
 
 #include "Shape.h"
 
@@ -11,6 +11,7 @@ public:
 
 	virtual float GetArea();
 	virtual float GetPerimeter();
+	virtual void Print() override;
 };
 
 #endif // #ifndef TWO_DIMENSIONAL_H

@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 #include"TwoDimensional.h"
@@ -14,8 +15,8 @@ public:
 	float GetWidth() { return mWidth; }
 	float GetHeight() { return mHeight; }
 
-	virtual float GetAreas() { return mWidth * mHeight; }
-	virtual float GetPerimeters() { return (mWidth * 2.0f) + (mHeight * 2.0f); }
+	virtual float GetArea() override { return mWidth * mHeight; }
+	virtual float GetPerimeter() override { return 2.0f * (mWidth + mHeight); }
 
 	void Print() override;
 
