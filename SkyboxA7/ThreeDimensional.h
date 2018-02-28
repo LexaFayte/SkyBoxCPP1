@@ -12,6 +12,7 @@ public:
 
 	virtual float GetVolume();
 	virtual float GetSurfaceArea();
+	virtual void Print() override;
 };
 
 #endif // #ifndef THREE_DIMENSIONAL_H

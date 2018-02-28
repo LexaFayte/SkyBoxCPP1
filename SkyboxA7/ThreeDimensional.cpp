@@ -20,3 +20,8 @@ float ThreeDimensional::GetSurfaceArea()
 {
 	return 0.0f;
 }
+
+void ThreeDimensional::Print()
+{
+	//empty
+}
