@@ -22,6 +22,8 @@ public:
 private:
 	float mRadius;
 	const float mPie;
+	float mVolume = 0;
+	float mSurfaceArea = 0;
 };
 
 #endif // #ifndef SPHERE_H
