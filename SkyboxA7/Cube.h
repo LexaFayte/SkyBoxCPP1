@@ -15,9 +15,9 @@ public:
 	void SetHeight(float height);
 	void SetDepth(float depth);
 
-	float GetWidth() { return mWidth; }
-	float GetHeight() { return mHeight; }
-	float GetDepth() { return mDepth; }
+	const float& GetWidth() const noexcept { return mWidth; }
+	const float& GetHeight() const noexcept { return mHeight; }
+	const float& GetDepth() const noexcept { return mDepth; }
 
 	float GetVolume() override { return std::powf(mHeight,3); }
 	float GetSurfaceArea() override { return 6.0f * std::powf(mHeight,2); }

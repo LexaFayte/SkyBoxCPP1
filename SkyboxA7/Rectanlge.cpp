@@ -3,7 +3,7 @@
 #include "Rectangle.h"
 
 Rectangle::Rectangle(std::string name, float width, float height)
-	: TwoDimensional(name)
+	: TwoDimensional(name), Shape(name)
 	, mWidth(width)
 	, mHeight(height)
 {

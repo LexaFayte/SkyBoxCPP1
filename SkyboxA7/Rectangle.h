@@ -12,11 +12,11 @@ public:
 	void SetWidth(float width);
 	void SetHeight(float height);
 
-	float GetWidth() { return mWidth; }
-	float GetHeight() { return mHeight; }
+	const float& GetWidth() const noexcept { return mWidth; }
+	const float& GetHeight() const noexcept { return mHeight; }
 
-	virtual float GetArea() override { return mWidth * mHeight; }
-	virtual float GetPerimeter() override { return 2.0f * (mWidth + mHeight); }
+	float GetArea() override { return mWidth * mHeight; }
+	float GetPerimeter() override { return 2.0f * (mWidth + mHeight); }
 
 	void Print() override;
 

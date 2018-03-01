@@ -4,6 +4,7 @@
 
 Sphere::Sphere(const std::string & name, float radius)
 	: ThreeDimensional(name)
+	, Shape(name)
 	, mRadius(0.0f)
 	, mPie(3.14f)
 {
