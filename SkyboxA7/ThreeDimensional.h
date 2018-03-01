@@ -4,15 +4,15 @@
 #include <string>
 #include "Shape.h"
 
-class ThreeDimensional : public Shape
+class ThreeDimensional : public virtual Shape
 {
 public:
 	ThreeDimensional(std::string name);
-	~ThreeDimensional();
+	virtual ~ThreeDimensional() {};
 
 	virtual float GetVolume();
 	virtual float GetSurfaceArea();
 	virtual void Print() override;
 };
 
-#endif // #ifndef THREE_DIMENSIONAL_H
+#endif 

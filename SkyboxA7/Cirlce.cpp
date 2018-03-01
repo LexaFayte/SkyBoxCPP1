@@ -2,8 +2,9 @@
 
 #include "Circle.h"
 
-Circle::Circle(string name, float radius)
-	: TwoDimensional(name)
+Circle::Circle(std::string name, float radius) : 
+	TwoDimensional(name)
+	, Shape(name)
 	, mPie(3.14f)
 {
 	SetRadius(radius);

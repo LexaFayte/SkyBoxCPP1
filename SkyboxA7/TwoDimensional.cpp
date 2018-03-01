@@ -1,12 +1,6 @@
 #include "TwoDimensional.h"
 
-TwoDimensional::TwoDimensional(std::string name)
-	: Shape(name)
-{
-	// Empty
-}
-
-TwoDimensional::~TwoDimensional()
+TwoDimensional::TwoDimensional(std::string name) : Shape(name)
 {
 	// Empty
 }

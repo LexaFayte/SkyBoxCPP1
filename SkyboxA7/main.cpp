@@ -24,7 +24,7 @@ int main()
 	PrintName(cube.GetName());
 	cube.Print();
 
-	while (1);
+	system("pause");
 	return 0;
 }
 

@@ -3,11 +3,11 @@
 
 #include "Shape.h"
 
-class TwoDimensional : public Shape
+class TwoDimensional : public virtual Shape
 {
 public:
 	TwoDimensional(std::string name);
-	~TwoDimensional();
+	virtual ~TwoDimensional() {};
 
 	virtual float GetArea();
 	virtual float GetPerimeter();
