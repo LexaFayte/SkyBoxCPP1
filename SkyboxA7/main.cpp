@@ -10,7 +10,7 @@ int main()
 	Circle circle("Circle", 5.0f);
 	Rectangle rectangle("Rectangle", 69.2f, 7.2f);
 	Sphere sphere("Sphere", 2.0f);
-	Cube cube("Cube", 5.0f, 2.0f, 7.8f);
+	Cube cube("Cube", 5.0f);
 
 	PrintName(circle.GetName());
 	circle.Print();

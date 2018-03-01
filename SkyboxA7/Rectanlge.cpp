@@ -4,9 +4,10 @@
 
 Rectangle::Rectangle(std::string name, float width, float height)
 	: TwoDimensional(name), Shape(name)
-	, mWidth(width)
-	, mHeight(height)
 {
+	SetWidth(width);
+	SetHeight(height);
+	Calculate();
 }
 
 Rectangle::~Rectangle()
@@ -24,8 +25,14 @@ void Rectangle::SetHeight(float height)
 	mHeight = BelowZeroCheck(height);
 }
 
+void Rectangle::Calculate()
+{
+	mArea = GetArea();
+	mPerimiter = GetPerimeter();
+}
+
 void Rectangle::Print()
 {
-	std::cout << "Perimeter: " << GetPerimeter() << std::endl;
-	std::cout << "Area: " << GetArea() << std::endl;
+	std::cout << "Perimeter: " << mPerimiter << std::endl;
+	std::cout << "Area: " << mArea << std::endl;
 }

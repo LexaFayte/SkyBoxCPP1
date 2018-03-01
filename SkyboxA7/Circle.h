@@ -22,6 +22,8 @@ public:
 private:
 	float mRadius;
 	const float mPie;
+	float mArea = 0;
+	float mPerimiter = 0;
 };
 
 #endif // #ifndef CIRCLE_H

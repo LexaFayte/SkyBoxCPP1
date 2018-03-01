@@ -18,9 +18,13 @@ public:
 	float GetArea() override { return mWidth * mHeight; }
 	float GetPerimeter() override { return 2.0f * (mWidth + mHeight); }
 
+	void Calculate();
+
 	void Print() override;
 
 private:
 	float mWidth;
 	float mHeight;
+	float mArea = 0;
+	float mPerimiter = 0;
 };
