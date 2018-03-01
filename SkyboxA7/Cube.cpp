@@ -4,7 +4,7 @@
 
 Cube::Cube(std::string name, float width, float height, float depth)
 	: ThreeDimensional(name)
-	, mDepth(0.0f)
+	, Shape(name)
 {
 	SetWidth(width);
 	SetHeight(height);

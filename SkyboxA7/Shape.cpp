@@ -2,9 +2,9 @@
 
 #include "Shape.h"
 
-Shape::Shape(std::string name)
+Shape::Shape(std::string name) : mName(name)
 {
-	mName = name;
+
 }
 
 void Shape::Print()
@@ -12,11 +12,11 @@ void Shape::Print()
 	// Empty
 }
 
-float Shape::BelowZeroCheck(float number)
+float Shape::BelowZeroCheck(const float& number) noexcept
 {
 	if (number < 0.0f)
 	{
-		cout << "ERROR - " << number << " Invaild. " << endl;
+		std::cout << "ERROR - " << number << " Invaild. " << std::endl;
 		return 0.0f;
 	}
 	return number;

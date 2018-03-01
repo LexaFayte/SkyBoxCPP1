@@ -1,19 +1,17 @@
 #pragma once
 #include <string>
 
-using namespace std;
-
 class Shape
 {
 public:
-	Shape(string name);
+	Shape(std::string name);
+	virtual ~Shape() {};
 
-	string& GetName() { return mName; }
-	void SetName(string name) { mName = name; }
+	virtual const std::string& GetName() const noexcept { return mName; }
 
 	virtual void Print();
-	float BelowZeroCheck(float number);
+	float BelowZeroCheck(const float& number) noexcept;
 
 private:
-	string mName;
+	std::string mName;
 };
