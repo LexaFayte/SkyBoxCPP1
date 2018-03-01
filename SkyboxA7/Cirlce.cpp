@@ -18,10 +18,12 @@ Circle::~Circle()
 void Circle::SetRadius(float radius)
 {
 	mRadius = BelowZeroCheck(radius);
+	mArea = GetArea();
+	mPerimiter = GetPerimeter();
 }
 
 void Circle::Print()
 {
-	std::cout << "Perimeter: " << GetPerimeter() << std::endl;
-	std::cout << "Area: " << GetArea() << std::endl;
+	std::cout << "Perimeter: " << mPerimiter << std::endl;
+	std::cout << "Area: " << mArea << std::endl;
 }
