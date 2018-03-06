@@ -19,10 +19,12 @@ Sphere::~Sphere()
 void Sphere::SetRadius(float radius)
 {
 	mRadius = BelowZeroCheck(radius);
+	mVolume = GetVolume();
+	mSurfaceArea = GetSurfaceArea();
 }
 
 void Sphere::Print()
 {
-	std::cout << "Volume: " << GetVolume() << std::endl;
-	std::cout << "Surface Area: " << GetSurfaceArea() << std::endl;
+	std::cout << "Volume: " << mVolume << std::endl;
+	std::cout << "Surface Area: " << mSurfaceArea << std::endl;
 }
