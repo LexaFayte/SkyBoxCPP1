@@ -12,7 +12,7 @@ private:
 	bool mActionChanged = true;
 
 	const int NUM_ACTIONS = 4;
-	const float TIME_BEFORE_ACTION = 1;
+	const float TIME_BEFORE_ACTION = 1.0f;
 	float timer = TIME_BEFORE_ACTION;
 
 	void ProcessAction();

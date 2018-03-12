@@ -17,22 +17,24 @@ void Player::TakeDamage(const int damage, const Helper::Actions action) noexcept
 {
 	//do calculations for if blocking
 	int finalDamage = damage;
-
-	if (mIsBlocking)
+	if (action != Helper::Actions::none)
 	{
-		int damageReduction = 0;
-
-		if (action == Helper::Actions::HighKick &&
-			mCurrentAction == Helper::Actions::HighBlock ||
-			action == Helper::Actions::LowKick &&
-			mCurrentAction == Helper::Actions::LowBlock)
+		if (mIsBlocking)
 		{
-			damageReduction = Helper::RandomFloat(0.25, 1);
-			finalDamage = floor(damage * damageReduction);
-		}
-	}
+			int damageReduction = 0;
 
-	mHealth -= finalDamage;
+			if (action == Helper::Actions::HighKick &&
+				mCurrentAction == Helper::Actions::HighBlock ||
+				action == Helper::Actions::LowKick &&
+				mCurrentAction == Helper::Actions::LowBlock)
+			{
+				damageReduction = Helper::RandomFloat(0.25, 1);
+				finalDamage = floor(damage * damageReduction);
+			}
+		}
+
+		mHealth -= finalDamage;
+	}
 
 	if (mHealth < 0)
 	{
