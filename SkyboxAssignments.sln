@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkyboxA9", "SkyboxA9\Skybox
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkyboxA10", "SkyboxA10\SkyboxA10.vcxproj", "{693FA285-F9E1-40C2-BE53-EC9A470F57DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkyboxA11", "SkyboxA11\SkyboxA11.vcxproj", "{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -131,6 +133,14 @@ Global
 		{693FA285-F9E1-40C2-BE53-EC9A470F57DB}.Release|x64.Build.0 = Release|x64
 		{693FA285-F9E1-40C2-BE53-EC9A470F57DB}.Release|x86.ActiveCfg = Release|Win32
 		{693FA285-F9E1-40C2-BE53-EC9A470F57DB}.Release|x86.Build.0 = Release|Win32
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Debug|x64.ActiveCfg = Debug|x64
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Debug|x64.Build.0 = Debug|x64
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Debug|x86.ActiveCfg = Debug|Win32
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Debug|x86.Build.0 = Debug|Win32
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Release|x64.ActiveCfg = Release|x64
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Release|x64.Build.0 = Release|x64
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Release|x86.ActiveCfg = Release|Win32
+		{A4FB81E5-1B03-4086-BB47-3BB7FEAB94F3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
