@@ -6,7 +6,7 @@ class Camera
 {
 public:
 	//Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH);
-	//~Camera();
+	~Camera();
 
 	//void Update(std::unique_ptr<DirectX::Keyboard>& keyboard, std::unique_ptr<DirectX::Mouse>& mouse, float deltaTime);
 
@@ -34,8 +34,8 @@ private:
 	SimpleMath::Vector3 mPosition;
 	SimpleMath::Vector3 mRotation;
 	SimpleMath::Vector3 mLookAt;
-	SimpleMath::Vector3 mMouseRotationBuffer;
-	SimpleMath::Vector3 mRS;
+	float mYaw = 0.0f;
+	float mPitch = 0.0f;
 
 	SimpleMath::Matrix mView;
 	SimpleMath::Matrix mProj;
@@ -44,6 +44,10 @@ private:
 	int mViewPortHeight;
 	float mFOV = 70.0f;
 	float mAspectRatio;
+
+	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
+
+	SimpleMath::Vector3 CalculateLookAt();
 
 	inline float clamp(float x, float a, float b)
 	{

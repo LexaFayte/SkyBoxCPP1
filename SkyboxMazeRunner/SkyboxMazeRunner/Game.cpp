@@ -14,7 +14,7 @@ using Microsoft::WRL::ComPtr;
 
 XMGLOBALCONST XMVECTORF32 DeepDarkGray = { { { 0.150000000f, 0.150000000f, 0.150000000f, 1.000000000f } } };
 //static const SimpleMath::Vector3 START_POSITION (0.f, 10.0f, 20.f);
-static const XMVECTORF32 START_POSITION = { 0.f, 5.0f, -10.f, 0.f };
+static const XMVECTORF32 START_POSITION = { 0.f, 2.0f, -10.f, 0.f };
 static const float ROTATION_GAIN = 0.004f;
 static const float MOVEMENT_GAIN = 0.07f;
 
@@ -107,6 +107,7 @@ void Game::Update(DX::StepTimer const& timer)
 		}
 	}
 
+	//is this necessary?
 	m_mouse->SetMode(mouse.leftButton ? Mouse::MODE_RELATIVE : Mouse::MODE_RELATIVE);
 
 	Vector3 move = Vector3::Zero;
@@ -131,7 +132,7 @@ void Game::Update(DX::StepTimer const& timer)
 		move.x -= 1.0f;
 	}
 
-	Quaternion q = Quaternion::CreateFromYawPitchRoll(m_yaw, -m_pitch, 0.0f);
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(m_yaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending
 	move = Vector3::Transform(move, q);
 
 	move *= MOVEMENT_GAIN;
