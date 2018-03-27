@@ -4,16 +4,27 @@ using namespace DirectX;
 
 class Camera
 {
+private:
+	void CalculateLookAt();
+	void CalculateView();
+
 public:
-	//Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH);
+	Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH);
 	~Camera();
 
 	//void Update(std::unique_ptr<DirectX::Keyboard>& keyboard, std::unique_ptr<DirectX::Mouse>& mouse, float deltaTime);
 
 	// Get/Set
-	SimpleMath::Vector3 getLookAt() const noexcept
+	SimpleMath::Vector3 getLookAt()
 	{
+		//CalculateLookAt();
 		return mLookAt;
+	}
+
+	SimpleMath::Matrix getView() 
+	{
+		//CalculateView();
+		return mView;
 	}
 
 	SimpleMath::Vector3 getPosition() const noexcept
@@ -26,8 +37,17 @@ public:
 		return mProj;
 	}
 
+	void setPosition(const SimpleMath::Vector3 pos)
+	{
+		mPosition = pos;
+	}
+
+
+	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
+
 private:
-	const float kSpeed = 0.05f;
+	const float kMoveSpeed = 0.07f;
+	const float kRotationSpeed = 0.004f;
 	const float kNearZ = 0.1f;
 	const float kFarZ = 1000.0f;
 
@@ -44,10 +64,6 @@ private:
 	int mViewPortHeight;
 	float mFOV = 70.0f;
 	float mAspectRatio;
-
-	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
-
-	SimpleMath::Vector3 CalculateLookAt();
 
 	inline float clamp(float x, float a, float b)
 	{

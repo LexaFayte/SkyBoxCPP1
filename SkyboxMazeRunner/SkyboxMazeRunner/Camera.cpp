@@ -2,11 +2,19 @@
 #include "Camera.h"
 #include <algorithm>
 
-Camera::Camera() {};
+Camera::Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH) :
+	mPosition(pos), mAspectRatio(aspectRatio), mViewPortWidth(VPW), mViewPortHeight(VPH)
+{
+	mView = SimpleMath::Matrix::CreateLookAt(SimpleMath::Vector3(2.0f, 2.0f, 2.0f),
+		SimpleMath::Vector3::Zero, SimpleMath::Vector3::UnitY);
+
+	mProj = SimpleMath::Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(mFOV), float(mViewPortWidth) / float(mViewPortHeight), kNearZ, kFarZ);
+
+}
 
 Camera::~Camera() {};
 
-SimpleMath::Vector3 Camera::CalculateLookAt()
+void Camera::CalculateLookAt()
 {
 	float y = sinf(mPitch);
 	float r = cosf(mPitch);
@@ -16,6 +24,11 @@ SimpleMath::Vector3 Camera::CalculateLookAt()
 	mLookAt = mPosition + SimpleMath::Vector3(x, y, z);
 }
 
+void Camera::CalculateView()
+{
+	mView = SimpleMath::Matrix::CreateLookAt(mPosition, mLookAt, SimpleMath::Vector3::Up);
+}
+
 void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState)
 {
 	if (keyboardState.Escape)
@@ -23,27 +36,21 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 		PostQuitMessage(0);
 	}
 
-	if (mouseState.positionMode == Mouse::MODE_RELATIVE)
-	{
-		SimpleMath::Vector3 delta = SimpleMath::Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * kSpeed;
+	SimpleMath::Vector3 delta = SimpleMath::Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * kRotationSpeed;
 		
-		mPitch -= delta.y;
-		mYaw -= delta.x;
+	mPitch -= delta.y;
+	mYaw -= delta.x;
 
-		//can replace with call to clamp?
-		float limit = XM_PI / 2.0f - 0.01f;
-		mPitch = std::max(-limit, mPitch);
-		mPitch = std::min(+limit, mPitch);
+	float limit = XM_PI / 2.0f - 0.01f;
+	mPitch = clamp(mPitch, -limit, limit);
 
-		//can replace with call to wrap?
-		if (mYaw > XM_PI)
-		{
-			mYaw -= XM_PI * 2.0f;
-		}
-		else if (mYaw < -XM_PI)
-		{
-			mYaw += XM_PI * 2.0f;
-		}
+	if (mYaw > XM_PI)
+	{
+		mYaw -= XM_PI * 2.0f;
+	}
+	else if (mYaw < -XM_PI)
+	{
+		mYaw += XM_PI * 2.0f;
 	}
 
 	SimpleMath::Vector3 move = SimpleMath::Vector3::Zero;
@@ -71,8 +78,9 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 	SimpleMath::Quaternion q = SimpleMath::Quaternion::CreateFromYawPitchRoll(mYaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending
 	move = SimpleMath::Vector3::Transform(move, q);
 
-	move *= kSpeed;
+	move *= kMoveSpeed;
 	mPosition += move;
 
 	CalculateLookAt();
+	CalculateView();
 }
