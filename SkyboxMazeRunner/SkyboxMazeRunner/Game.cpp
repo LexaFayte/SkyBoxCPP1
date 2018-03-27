@@ -13,8 +13,8 @@ using namespace DirectX::SimpleMath;
 using Microsoft::WRL::ComPtr;
 
 XMGLOBALCONST XMVECTORF32 DeepDarkGray = { { { 0.150000000f, 0.150000000f, 0.150000000f, 1.000000000f } } };
-//static const SimpleMath::Vector3 START_POSITION (0.f, 10.0f, 20.f);
-static const XMVECTORF32 START_POSITION = { 0.f, 2.0f, -10.f, 0.f };
+static const SimpleMath::Vector3 START_POSITION (0.f, 2.0f, -10.f);
+//static const XMVECTORF32 START_POSITION = { 0.f, 2.0f, -10.f, 0.f };
 static const float ROTATION_GAIN = 0.004f;
 static const float MOVEMENT_GAIN = 0.07f;
 
@@ -22,8 +22,8 @@ Game::Game() :
 	m_window(nullptr),
 	m_outputWidth(800),
 	m_outputHeight(600),
-	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
-	m_cameraPos(START_POSITION.v)
+	m_featureLevel(D3D_FEATURE_LEVEL_9_1)
+	//m_cameraPos(START_POSITION.v)
 {
 }
 
@@ -67,80 +67,17 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// TODO: Add your game logic here.
 	float time = float(timer.GetTotalSeconds());
-	auto kb = m_keyboard->GetState();
-	if (kb.Escape)
-	{
-		PostQuitMessage(0);
-	}
-	
+	auto kb = m_keyboard->GetState();	
 	auto mouse = m_mouse->GetState();
-
-	//if (mouse.positionMode == Mouse::MODE_RELATIVE)
-	//{
-	//	m_Camera->Update(m_keyboard, m_mouse, time);
-	//}
-	//
-	//m_mouse->SetMode(mouse.leftButton ? Mouse::MODE_RELATIVE : Mouse::MODE_ABSOLUTE);
 
 	if (mouse.positionMode == Mouse::MODE_RELATIVE)
 	{
-		Vector3 delta = Vector3(float(mouse.x), float(mouse.y), 0.f)
-			* ROTATION_GAIN;
-
-		m_pitch -= delta.y;
-		m_yaw -= delta.x;
-
-		// limit pitch to straight up or straight down
-		// with a little fudge-factor to avoid gimbal lock
-		float limit = XM_PI / 2.0f - 0.01f;
-		m_pitch = std::max(-limit, m_pitch);
-		m_pitch = std::min(+limit, m_pitch);
-
-		// keep longitude in sane range by wrapping
-		if (m_yaw > XM_PI)
-		{
-			m_yaw -= XM_PI * 2.0f;
-		}
-		else if (m_yaw < -XM_PI)
-		{
-			m_yaw += XM_PI * 2.0f;
-		}
+		m_Camera->Update(mouse, kb);
 	}
 
-	//is this necessary?
-	m_mouse->SetMode(mouse.leftButton ? Mouse::MODE_RELATIVE : Mouse::MODE_RELATIVE);
-
-	Vector3 move = Vector3::Zero;
-
-	if (kb.Up || kb.W)
-	{
-		move.z += 1.0f;
-	}
-
-	if (kb.Down || kb.S)
-	{
-		move.z -= 1.0f;
-	}
-
-	if (kb.Left || kb.A)
-	{
-		move.x += 1.0f;
-	}
-
-	if (kb.Right || kb.D)
-	{
-		move.x -= 1.0f;
-	}
-
-	Quaternion q = Quaternion::CreateFromYawPitchRoll(m_yaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending
-	move = Vector3::Transform(move, q);
-
-	move *= MOVEMENT_GAIN;
-
-	m_cameraPos += move;
+	m_mouse->SetMode(Mouse::MODE_RELATIVE);
 
 	//WORLD MATRIX == MODEL MATRIX (SAME THING; TWO DIFFERENT NAMES, BUT COMPLETELY ANALOGOUS)
-		
     elapsedTime;
 }
 
@@ -155,17 +92,8 @@ void Game::Render()
 
     Clear();
 
-	float y = sinf(m_pitch);
-	float r = cosf(m_pitch);
-	float z = r * cosf(m_yaw);
-	float x = r * sinf(m_yaw);
-	
-	XMVECTOR lookAt = m_cameraPos + Vector3(x, y, z);
-
-	XMMATRIX view = XMMatrixLookAtRH(m_cameraPos, lookAt, Vector3::Up);
-
     // TODO: Add your rendering code here.
-	m_model->Draw(m_d3dContext.Get(), *m_states, m_world, view, m_proj);
+	m_model->Draw(m_d3dContext.Get(), *m_states, m_world, m_Camera->getView(), m_Camera->getProj());
 
     Present();
 }
@@ -409,13 +337,8 @@ void Game::CreateResources()
     DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 	
     // TODO: Initialize windows-size dependent objects here.
-	/*m_Camera = std::make_unique<Camera>(START_POSITION, SimpleMath::Vector3(0, 0, 0), 
-		float(backBufferWidth) / float(backBufferHeight), backBufferWidth, backBufferHeight);*/
-	
-	m_view = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
-		Vector3::Zero, Vector3::UnitY);
-	m_proj = Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(70.f),
-		float(backBufferWidth) / float(backBufferHeight), 0.01f, 100.f);	
+	m_Camera = std::make_unique<Camera>(START_POSITION, SimpleMath::Vector3(0, 0, 0), 
+		float(backBufferWidth) / float(backBufferHeight), backBufferWidth, backBufferHeight);
 }
 
 void Game::OnDeviceLost()
