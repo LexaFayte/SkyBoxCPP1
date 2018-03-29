@@ -25,6 +25,12 @@ public:
 	LinkedList(std::initializer_list<int> list);
 	~LinkedList();
 
+	LinkedList(const LinkedList& other);
+	LinkedList(LinkedList&& other);
+
+	LinkedList& operator=(const LinkedList& other);
+	LinkedList& operator=(LinkedList&& other);
+
 	Node*& getRoot() noexcept { return root; };
 	const int const GetSize() const noexcept { return size; }
 	void AddNode(Node*& rootPtr, int value);

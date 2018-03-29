@@ -33,6 +33,66 @@ LinkedList::~LinkedList()
 	}
 }
 
+LinkedList::LinkedList(const LinkedList& other) : size(other.size)
+{
+	if (other.root != nullptr)
+	{
+		Node* conductorOther = other.root;
+		root = new Node(other.root->value);
+		Node* conductorThis = root;
+
+		while (conductorOther->next != nullptr)
+		{
+			conductorThis->next = new Node(conductorOther->next->value);
+			conductorOther = conductorOther->next;
+			conductorThis = conductorThis->next;
+		}
+	}
+}
+
+LinkedList::LinkedList(LinkedList&& other) :
+	root{ std::exchange(other.root, nullptr) },
+	size{std::exchange(other.size, 0)}
+{
+
+}
+
+LinkedList& LinkedList::operator=(const LinkedList& other)
+{
+	if (this != &other)
+	{
+		delete root;
+		size = other.size;
+		if (other.root != nullptr)
+		{
+			Node* conductorOther = other.root;
+			root = new Node(other.root->value);
+			Node* conductorThis = root;
+
+			while (conductorOther->next != nullptr)
+			{
+				conductorThis->next = new Node(conductorOther->next->value);
+				conductorOther = conductorOther->next;
+				conductorThis = conductorThis->next;
+			}
+		}
+	}
+
+	return *this;
+}
+
+LinkedList& LinkedList::operator=(LinkedList&& other)
+{
+	if (this != &other)
+	{
+		delete root;
+		root = std::exchange(other.root, nullptr);
+		size = std::exchange(other.size, 0);
+	}
+
+	return *this;
+}
+
 void LinkedList::Reverse(Node* rootPtr, int ListSize)
 {
 	int curDepth = ListSize;
