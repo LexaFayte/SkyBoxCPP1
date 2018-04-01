@@ -46,8 +46,8 @@ public:
 	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
 
 private:
-	const float kMoveSpeed = 0.07f;
-	const float kRotationSpeed = 0.004f;
+	const float kMoveSpeed = 0.30f;
+	const float kRotationSpeed = 0.007f;
 	const float kNearZ = 0.1f;
 	const float kFarZ = 1000.0f;
 

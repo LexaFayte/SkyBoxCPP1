@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "Wall.h"
 
 extern void ExitGame();
 
@@ -13,8 +14,7 @@ using namespace DirectX::SimpleMath;
 using Microsoft::WRL::ComPtr;
 
 XMGLOBALCONST XMVECTORF32 DeepDarkGray = { { { 0.150000000f, 0.150000000f, 0.150000000f, 1.000000000f } } };
-static const SimpleMath::Vector3 START_POSITION (0.f, 2.0f, -10.f);
-//static const XMVECTORF32 START_POSITION = { 0.f, 2.0f, -10.f, 0.f };
+//SimpleMath::Vector3 START_POSITION (0.f, 2.0f, -10.f);
 static const float ROTATION_GAIN = 0.004f;
 static const float MOVEMENT_GAIN = 0.07f;
 
@@ -23,7 +23,6 @@ Game::Game() :
 	m_outputWidth(800),
 	m_outputHeight(600),
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1)
-	//m_cameraPos(START_POSITION.v)
 {
 }
 
@@ -33,6 +32,14 @@ void Game::Initialize(HWND window, int width, int height)
     m_window = window;
     m_outputWidth = std::max(width, 1);
     m_outputHeight = std::max(height, 1);
+
+	if (!m_Maze.LoadMazeFromFile(k_MazeFileName))
+	{
+		PostQuitMessage(0);
+	}
+
+	Vector3 mazeStart = m_Maze.getStartPosition();
+	m_StartPosition = Vector3(mazeStart.x * (200 * 0.06f), 2.0f, mazeStart.z *(200 * 0.06f));
 
     CreateDevice();
 
@@ -78,6 +85,10 @@ void Game::Update(DX::StepTimer const& timer)
 	m_mouse->SetMode(Mouse::MODE_RELATIVE);
 
 	//WORLD MATRIX == MODEL MATRIX (SAME THING; TWO DIFFERENT NAMES, BUT COMPLETELY ANALOGOUS)
+	for (Entity*& ntt : ntts)
+	{
+		ntt->Update(time);
+	}
     elapsedTime;
 }
 
@@ -93,7 +104,11 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
-	m_model->Draw(m_d3dContext.Get(), *m_states, m_world, m_Camera->getView(), m_Camera->getProj());
+
+	for (Entity*& ntt : ntts)
+	{
+		ntt->Render(m_d3dContext.Get(), *m_states, m_Camera->getView(), m_Camera->getProj());
+	}
 
     Present();
 }
@@ -238,8 +253,9 @@ void Game::CreateDevice()
 
     // TODO: Initialize device dependent objects here (independent of window size).
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
-	m_fxFactory = std::make_unique<EffectFactory>(m_d3dDevice.Get());
-	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"9mmAmmoBox.cmo", *m_fxFactory);
+	m_fxFactory = std::make_unique<DGSLEffectFactory>(m_d3dDevice.Get());
+	//load here
+	LoadMazeBlocks();
 	m_world = Matrix::Identity;
 }
 
@@ -337,7 +353,7 @@ void Game::CreateResources()
     DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 	
     // TODO: Initialize windows-size dependent objects here.
-	m_Camera = std::make_unique<Camera>(START_POSITION, SimpleMath::Vector3(0, 0, 0), 
+	m_Camera = std::make_unique<Camera>(m_StartPosition, SimpleMath::Vector3(0, 0, 0),
 		float(backBufferWidth) / float(backBufferHeight), backBufferWidth, backBufferHeight);
 }
 
@@ -352,9 +368,33 @@ void Game::OnDeviceLost()
     m_d3dDevice.Reset();
 	m_states.reset();
 	m_fxFactory.reset();
-	m_model.reset();
+	
+	for (Entity*& ntt : ntts)
+	{
+		ntt->ResetModel();
+	}
 
     CreateDevice();
 
     CreateResources();
+}
+
+void Game::LoadMazeBlocks()
+{
+	int rows = m_Maze.getRows();
+	int cols = m_Maze.getCols();
+	std::vector<std::vector<int>> maze = m_Maze.getMaze();
+
+	for (int row = 0; row < rows; ++row)
+	{
+		for (int col = 0; col < cols; ++col)
+		{
+			if (maze[row][col] == 0)
+			{
+				Wall *temp = new Wall (row, col);
+				temp->LoadModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory);//L"9mmAmmoBox.cmo"
+				ntts.push_back(temp);
+			}
+		}
+	}
 }

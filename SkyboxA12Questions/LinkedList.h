@@ -31,10 +31,9 @@ public:
 	LinkedList& operator=(const LinkedList& other);
 	LinkedList& operator=(LinkedList&& other);
 
-	Node*& getRoot() noexcept { return root; };
+	Node* getRoot() noexcept { return root; };
 	const int const GetSize() const noexcept { return size; }
 	void AddNode(Node*& rootPtr, int value);
-	//void RemoveNode(Node* node);
 	void Reverse(Node* rootPtr, int ListSize);
 	void Print(const Node* root) const;
 
