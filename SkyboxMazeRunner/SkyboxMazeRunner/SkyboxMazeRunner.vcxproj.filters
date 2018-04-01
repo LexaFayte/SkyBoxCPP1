@@ -8,22 +8,31 @@
     <Filter Include="Source">
       <UniqueIdentifier>{552e5372-3bd2-454a-8b43-2c20995a9919}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\headers">
+    <Filter Include="headers">
       <UniqueIdentifier>{85f07b88-7d1a-4666-a2ac-5aa59d9b522c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>Source\headers</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Source\headers</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="StepTimer.h">
-      <Filter>Source\headers</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Source\headers</Filter>
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeMaker.h">
+      <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +46,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeMaker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,6 +71,9 @@
     <Image Include="9mmAmmoBox.jpg">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="MazeBlockTex.png">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -60,8 +81,9 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="cup.cmo" />
     <None Include="9mmAmmoBox.cmo" />
+    <None Include="packages.config" />
+    <None Include="MazeWall.cmo" />
   </ItemGroup>
 </Project>
