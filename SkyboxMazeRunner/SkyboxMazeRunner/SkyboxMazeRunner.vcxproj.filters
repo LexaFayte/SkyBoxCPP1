@@ -60,8 +60,8 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="cup.cmo" />
     <None Include="9mmAmmoBox.cmo" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
