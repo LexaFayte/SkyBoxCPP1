@@ -55,12 +55,14 @@ public:
 	BinaryNode* const getRoot() const noexcept { return root; }
 
 	void AddNode(int val, BinaryNode*& root);
+	void RemoveNode(int val, BinaryNode* rootPtr);
+	int FindMin(BinaryNode* nodePtr);
 	int FindMaxDepth(BinaryNode* rootPtr, int currentDepth = 0, int maxDepth = 0);
 
 	void Print(BinaryNode *root, int space = 0)
 	{
 		// Base case
-		if (root == NULL)
+		if (root == nullptr)
 			return;
 
 		// Increase distance between levels
@@ -82,4 +84,6 @@ public:
 
 private:
 	BinaryNode * root = nullptr;
+	void RemoveRoot();
+	void RemoveNonRootNode(BinaryNode* parentNode, BinaryNode* matchedNode, bool leftChild);
 };
