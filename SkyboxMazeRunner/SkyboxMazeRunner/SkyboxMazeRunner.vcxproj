@@ -156,8 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="EndPoint.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Helpers.h" />
     <ClInclude Include="MazeMaker.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="Camera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="EndPoint.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -187,6 +190,7 @@
     <Image Include="cup.jpg" />
     <Image Include="directx.ico" />
     <Image Include="MazeBlockTex.png" />
+    <Image Include="Wolf3D_EndPointUV.png" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
@@ -194,6 +198,7 @@
   <ItemGroup>
     <None Include="9mmAmmoBox.cmo" />
     <None Include="cup.cmo" />
+    <None Include="EndBox.cmo" />
     <None Include="MazeWall.cmo" />
     <None Include="packages.config" />
   </ItemGroup>

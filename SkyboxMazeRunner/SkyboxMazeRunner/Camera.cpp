@@ -9,7 +9,9 @@ Camera::Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRat
 		SimpleMath::Vector3::Zero, SimpleMath::Vector3::UnitY);
 
 	mProj = SimpleMath::Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(mFOV), float(mViewPortWidth) / float(mViewPortHeight), kNearZ, kFarZ);
-
+	mBoundingSphere.sphere.Center = pos;
+	mBoundingSphere.sphere.Radius = kRadius;
+	mBoundingSphere.collision = DISJOINT;
 }
 
 Camera::~Camera() {};
@@ -79,7 +81,55 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 	move = SimpleMath::Vector3::Transform(move, q);
 
 	move *= kMoveSpeed;
-	mPosition += move;
+
+	//collision detection here
+	mPreviewMove = mPosition + move;
+
+	//mPosition += move;
+
+	CalculateLookAt();
+	CalculateView();
+}
+
+void Camera::Move()
+{
+	if (mPreviewMove != SimpleMath::Vector3::Zero)
+	{
+		mPreviousPos = mPosition;
+		mPosition = mPreviewMove;
+		mBoundingSphere.sphere.Center = mPosition;
+	}
+	CalculateLookAt();
+	CalculateView();
+}
+
+void Camera::handleCollision(SimpleMath::Vector3 nttPos)
+{
+	//SimpleMath::Vector3 collisionMove = SimpleMath::Vector3::Zero;	
+	//SimpleMath::Vector3 relativePos = nttPos - mPosition;
+	
+	//float wallNormalX = 0;
+
+
+	//if (relativePos.x < 3.0f)
+	//{
+	//	//to the right of the wall
+	//	wallNormalX = 1.0f;
+	//}
+	//else
+	//{
+	//	//to the left of the wall
+	//	wallNormalX = -1.0f;
+	//}
+
+	//if (wallNormalX != 0)
+	//{
+	//	collisionMove.x += wallNormalX;
+	//}
+
+	//mPosition += collisionMove;
+	mPosition = mPreviousPos;
+	mBoundingSphere.sphere.Center = mPosition;
 
 	CalculateLookAt();
 	CalculateView();

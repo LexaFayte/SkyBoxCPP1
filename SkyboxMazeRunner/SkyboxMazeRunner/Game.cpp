@@ -5,6 +5,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Wall.h"
+#include "EndPoint.h"
 
 extern void ExitGame();
 
@@ -77,12 +78,53 @@ void Game::Update(DX::StepTimer const& timer)
 	auto kb = m_keyboard->GetState();	
 	auto mouse = m_mouse->GetState();
 
+	if (kb.Z)
+	{
+		mCollisionsEnabled = !mCollisionsEnabled;
+	}
+
 	if (mouse.positionMode == Mouse::MODE_RELATIVE)
 	{
 		m_Camera->Update(mouse, kb);
 	}
 
 	m_mouse->SetMode(Mouse::MODE_RELATIVE);
+
+	//check collision and move
+	bool collision = false;
+	Vector3 nttPos;
+
+	if (mCollisionsEnabled)
+	{
+		Vector3 previewMove = m_Camera->getPreviewMove();
+		CollisionSphere cameraCollider = m_Camera->getCollisionSphere();
+	
+		for (int i = 0; i < ntts.size(); ++i)
+		{
+			Model nttModel = ntts[i]->GetModel();
+
+			for (int j = 0; j < nttModel.meshes.size(); ++j)
+			{
+				if (nttModel.meshes[j]->boundingBox.Intersects(cameraCollider.sphere))
+				{
+					nttPos = nttModel.meshes[j]->boundingBox.Center;
+					collision = true;
+					goto continueUpdate;
+				}
+			}
+		}
+	}
+
+	continueUpdate:
+	
+	if (!collision)
+	{
+		m_Camera->Move();
+	}
+	else
+	{
+		m_Camera->handleCollision(nttPos);
+	}
 
 	//WORLD MATRIX == MODEL MATRIX (SAME THING; TWO DIFFERENT NAMES, BUT COMPLETELY ANALOGOUS)
 	for (Entity*& ntt : ntts)
@@ -394,6 +436,12 @@ void Game::LoadMazeBlocks()
 				Wall *temp = new Wall (row, col);
 				temp->LoadModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory);//L"9mmAmmoBox.cmo"
 				ntts.push_back(temp);
+			}
+			else if (maze[row][col] == 3)
+			{
+				EndPoint *epPtr = new EndPoint(row, col);
+				epPtr->LoadModel(m_d3dDevice.Get(), L"EndBox.cmo", *m_fxFactory);
+				ntts.push_back(epPtr);
 			}
 		}
 	}

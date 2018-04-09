@@ -11,6 +11,9 @@
     <Filter Include="headers">
       <UniqueIdentifier>{85f07b88-7d1a-4666-a2ac-5aa59d9b522c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9ce88aa6-f349-4581-83ca-8145c601f9a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -32,6 +35,12 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="MazeMaker.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="EndPoint.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -57,6 +66,9 @@
     <ClCompile Include="MazeMaker.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="EndPoint.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -74,6 +86,9 @@
     <Image Include="MazeBlockTex.png">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Wolf3D_EndPointUV.png">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -85,5 +100,6 @@
     <None Include="9mmAmmoBox.cmo" />
     <None Include="packages.config" />
     <None Include="MazeWall.cmo" />
+    <None Include="EndBox.cmo" />
   </ItemGroup>
 </Project>
