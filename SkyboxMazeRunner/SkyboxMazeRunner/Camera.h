@@ -12,18 +12,14 @@ public:
 	Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH);
 	~Camera();
 
-	//void Update(std::unique_ptr<DirectX::Keyboard>& keyboard, std::unique_ptr<DirectX::Mouse>& mouse, float deltaTime);
-
 	// Get/Set
 	SimpleMath::Vector3 getLookAt()
 	{
-		//CalculateLookAt();
 		return mLookAt;
 	}
 
 	SimpleMath::Matrix getView() 
 	{
-		//CalculateView();
 		return mView;
 	}
 
@@ -42,28 +38,46 @@ public:
 		mPosition = pos;
 	}
 
+	SimpleMath::Vector3 const getPreviewMove() const
+	{
+		return mPreviewMove;
+	}
+
+
+	CollisionSphere& getCollisionSphere()
+	{
+		return mBoundingSphere;
+	}
 
 	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
+	void Move();
+	void handleCollision(SimpleMath::Vector3 nttPos);
 
 private:
 	const float kMoveSpeed = 0.30f;
 	const float kRotationSpeed = 0.007f;
 	const float kNearZ = 0.1f;
 	const float kFarZ = 1000.0f;
+	const float kRadius = 0.5f;
 
-	SimpleMath::Vector3 mPosition;
-	SimpleMath::Vector3 mRotation;
-	SimpleMath::Vector3 mLookAt;
+	SimpleMath::Vector3 mPosition = SimpleMath::Vector3::Zero;
+	SimpleMath::Vector3 mRotation = SimpleMath::Vector3::Zero;
+	SimpleMath::Vector3 mLookAt = SimpleMath::Vector3::Zero;
 	float mYaw = 0.0f;
 	float mPitch = 0.0f;
 
-	SimpleMath::Matrix mView;
-	SimpleMath::Matrix mProj;
+	SimpleMath::Vector3 mPreviewMove = SimpleMath::Vector3::Zero;
+	SimpleMath::Vector3 mPreviousPos = SimpleMath::Vector3::Zero;
+
+	SimpleMath::Matrix mView = SimpleMath::Matrix::Identity;
+	SimpleMath::Matrix mProj = SimpleMath::Matrix::Identity;
 	
 	int mViewPortWidth;
 	int mViewPortHeight;
 	float mFOV = 70.0f;
 	float mAspectRatio;
+
+	CollisionSphere mBoundingSphere;
 
 	inline float clamp(float x, float a, float b)
 	{

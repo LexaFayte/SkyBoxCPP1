@@ -84,4 +84,5 @@ private:
 	std::vector<Entity*> ntts;
 
 	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;
+	bool mCollisionsEnabled = true;
 };
