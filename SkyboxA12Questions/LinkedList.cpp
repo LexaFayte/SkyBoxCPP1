@@ -127,6 +127,29 @@ void LinkedList::AddNode(Node*& rootPtr, int val)
 	AddNode(rootPtr->next, val);
 }
 
+void LinkedList::RemoveNode(Node* rootPtr, int value)
+{
+	if (rootPtr->next == nullptr)
+	{
+		return;
+	}
+
+	if (rootPtr->next->value == value)
+	{
+		Node* temp = rootPtr->next->next;
+		rootPtr->next->next = nullptr;
+		delete rootPtr->next;
+		rootPtr->next = temp;
+		return;
+	}
+	else
+	{
+		RemoveNode(rootPtr->next, value);
+	}
+	
+	return;
+}
+
 void LinkedList::Print(const Node* root) const
 {
 	if (root == nullptr)

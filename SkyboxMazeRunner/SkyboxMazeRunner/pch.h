@@ -61,6 +61,9 @@
 #include "SpriteFont.h"
 #include "VertexTypes.h"
 #include "WICTextureLoader.h"
+#include <DirectXCollision.h>
+
+#include "Helpers.h"
 
 namespace DX
 {

@@ -34,6 +34,7 @@ public:
 	Node* getRoot() noexcept { return root; };
 	const int const GetSize() const noexcept { return size; }
 	void AddNode(Node*& rootPtr, int value);
+	void RemoveNode(Node* rootPtr, int value);
 	void Reverse(Node* rootPtr, int ListSize);
 	void Print(const Node* root) const;
 
@@ -41,4 +42,6 @@ public:
 private:
 	Node * root = nullptr;
 	int size = 0;
+
+
 };
