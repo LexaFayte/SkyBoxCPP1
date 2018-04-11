@@ -30,6 +30,7 @@ int BitArray64::Get()
 void BitArray64::Return(int index)//does this function have to clear the bit in mBits to false?
 {
 	mBitsInUse ^= (1 << index);
+	Set(index, false);
 	std::cout << "TAKING BACK INDEX: " << index << std::endl;
 	std::cout << std::bitset<64>(mBitsInUse) << std::endl;
 }
