@@ -76,7 +76,12 @@ private:
 
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
+	std::unique_ptr<DirectX::GamePad> m_GamePad;
+	std::unique_ptr<DirectX::SpriteFont> m_Font;
 	std::unique_ptr<Camera> m_Camera;
+
+	SimpleMath::Vector2 m_FontPos;
+	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
 
 	MazeMaker m_Maze;
 	const std::string k_MazeFileName = "TestMaze.txt";
@@ -85,4 +90,5 @@ private:
 
 	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;
 	bool mCollisionsEnabled = true;
+	bool collision = false;
 };
