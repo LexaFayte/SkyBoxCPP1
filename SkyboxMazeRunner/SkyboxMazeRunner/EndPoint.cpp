@@ -5,7 +5,7 @@ EndPoint::EndPoint() :Entity(EntityTag::End) {};
 EndPoint::EndPoint(Vector3 pos) :Entity(EntityTag::End), mPos(pos) {};
 EndPoint::EndPoint(int x, int z) :Entity(EntityTag::End) 
 {
-	mPos = Vector3(x * (200 * 0.06f), 0.0f, z * (200 * 0.06f));
+	mPos = Vector3(x * (200 * 0.06f), 4.0f, z * (200 * 0.06f));
 };
 
 EndPoint::~EndPoint() {};
@@ -27,7 +27,8 @@ void EndPoint::Render(ID3D11DeviceContext* dc, const DirectX::CommonStates &stat
 
 void EndPoint::Update(float deltaTime)
 {
-	// order of mult = T * R * S	
+	// order of mult = T * R * S	to rotate in the world
+	// order of mult = R * T to rotate around local center
 
 	if (floatDir == 1)
 	{

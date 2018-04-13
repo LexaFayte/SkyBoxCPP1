@@ -49,13 +49,14 @@ public:
 		return mBoundingSphere;
 	}
 
-	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState);
+	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState, const GamePad::State& gamepadState);
 	void Move();
 	void handleCollision(SimpleMath::Vector3 nttPos);
 
 private:
 	const float kMoveSpeed = 0.30f;
-	const float kRotationSpeed = 0.007f;
+	const float kMouseRotationSpeed = 0.007f;
+	const float kGamePadRotationSpeed = 0.04f;
 	const float kNearZ = 0.1f;
 	const float kFarZ = 1000.0f;
 	const float kRadius = 0.5f;

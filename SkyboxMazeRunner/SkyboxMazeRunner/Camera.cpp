@@ -31,50 +31,80 @@ void Camera::CalculateView()
 	mView = SimpleMath::Matrix::CreateLookAt(mPosition, mLookAt, SimpleMath::Vector3::Up);
 }
 
-void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState)
+void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState, const GamePad::State& gamepadState)
 {
-	if (keyboardState.Escape)
+	if (keyboardState.Escape || gamepadState.buttons.back)
 	{
 		PostQuitMessage(0);
 	}
 
-	SimpleMath::Vector3 delta = SimpleMath::Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * kRotationSpeed;
-		
-	mPitch -= delta.y;
-	mYaw -= delta.x;
-
-	float limit = XM_PI / 2.0f - 0.01f;
-	mPitch = clamp(mPitch, -limit, limit);
-
-	if (mYaw > XM_PI)
-	{
-		mYaw -= XM_PI * 2.0f;
-	}
-	else if (mYaw < -XM_PI)
-	{
-		mYaw += XM_PI * 2.0f;
-	}
-
+	SimpleMath::Vector3 delta;
 	SimpleMath::Vector3 move = SimpleMath::Vector3::Zero;
 
-	if (keyboardState.Up || keyboardState.W)
+	if (gamepadState.IsConnected())
 	{
-		move.z += 1.0f;
-	}
+		delta = SimpleMath::Vector3(float(gamepadState.thumbSticks.rightX), float(gamepadState.thumbSticks.rightY * -1), 0.0f) * kGamePadRotationSpeed;
 
-	if (keyboardState.Down || keyboardState.S)
-	{
-		move.z -= 1.0f;
-	}
 
-	if (keyboardState.Left || keyboardState.A)
-	{
-		move.x += 1.0f;
-	}
+		mPitch -= delta.y;
+		mYaw -= delta.x;
 
-	if (keyboardState.Right || keyboardState.D)
+		float limit = XM_PI / 2.0f - 0.01f;
+		mPitch = clamp(mPitch, -limit, limit);
+
+		if (mYaw > XM_PI)
+		{
+			mYaw -= XM_PI * 2.0f;
+		}
+		else if (mYaw < -XM_PI)
+		{
+			mYaw += XM_PI * 2.0f;
+		}
+
+		move.x = gamepadState.thumbSticks.leftX * -1;
+		move.z = gamepadState.thumbSticks.leftY;		
+
+	}
+	else
 	{
-		move.x -= 1.0f;
+		delta = SimpleMath::Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * kMouseRotationSpeed;
+
+		mPitch -= delta.y;
+		mYaw -= delta.x;
+
+		float limit = XM_PI / 2.0f - 0.01f;
+		mPitch = clamp(mPitch, -limit, limit);
+
+		if (mYaw > XM_PI)
+		{
+			mYaw -= XM_PI * 2.0f;
+		}
+		else if (mYaw < -XM_PI)
+		{
+			mYaw += XM_PI * 2.0f;
+		}
+
+		
+
+		if (keyboardState.Up || keyboardState.W)
+		{
+			move.z += 1.0f;
+		}
+
+		if (keyboardState.Down || keyboardState.S)
+		{
+			move.z -= 1.0f;
+		}
+
+		if (keyboardState.Left || keyboardState.A)
+		{
+			move.x += 1.0f;
+		}
+
+		if (keyboardState.Right || keyboardState.D)
+		{
+			move.x -= 1.0f;
+		}
 	}
 
 	SimpleMath::Quaternion q = SimpleMath::Quaternion::CreateFromYawPitchRoll(mYaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending

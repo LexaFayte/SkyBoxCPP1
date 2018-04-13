@@ -55,6 +55,7 @@ void Game::Initialize(HWND window, int width, int height)
 	m_keyboard = std::make_unique<DirectX::Keyboard>();
 	m_mouse = std::make_unique<DirectX::Mouse>();
 	m_mouse->SetWindow(window);
+	m_GamePad = std::make_unique<DirectX::GamePad>();
 }
 
 // Executes the basic game loop.
@@ -77,6 +78,7 @@ void Game::Update(DX::StepTimer const& timer)
 	float time = float(timer.GetTotalSeconds());
 	auto kb = m_keyboard->GetState();	
 	auto mouse = m_mouse->GetState();
+	auto gamepad = m_GamePad->GetState(0);
 
 	if (kb.Z)
 	{
@@ -85,7 +87,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	if (mouse.positionMode == Mouse::MODE_RELATIVE)
 	{
-		m_Camera->Update(mouse, kb);
+		m_Camera->Update(mouse, kb, gamepad);
 	}
 
 	m_mouse->SetMode(Mouse::MODE_RELATIVE);
