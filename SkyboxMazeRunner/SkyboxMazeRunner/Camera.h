@@ -56,7 +56,7 @@ public:
 private:
 	const float kMoveSpeed = 0.30f;
 	const float kMouseRotationSpeed = 0.007f;
-	const float kGamePadRotationSpeed = 0.04f;
+	const float kGamePadRotationSpeed = 0.05f;
 	const float kNearZ = 0.1f;
 	const float kFarZ = 1000.0f;
 	const float kRadius = 0.5f;

@@ -200,6 +200,7 @@
     <None Include="cup.cmo" />
     <None Include="EndBox.cmo" />
     <None Include="MazeWall.cmo" />
+    <None Include="myfile.spritefont" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

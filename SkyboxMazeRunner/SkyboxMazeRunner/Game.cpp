@@ -93,7 +93,7 @@ void Game::Update(DX::StepTimer const& timer)
 	m_mouse->SetMode(Mouse::MODE_RELATIVE);
 
 	//check collision and move
-	bool collision = false;
+	collision = false;
 	Vector3 nttPos;
 
 	if (mCollisionsEnabled)
@@ -153,6 +153,16 @@ void Game::Render()
 	{
 		ntt->Render(m_d3dContext.Get(), *m_states, m_Camera->getView(), m_Camera->getProj());
 	}
+
+	m_SpriteBatch->Begin();
+	if (collision)
+	{
+		const wchar_t* text = L"Collision!";
+		Vector2 origin = m_Font->MeasureString(text) / 2.0f;
+		m_Font->DrawString(m_SpriteBatch.get(), text, m_FontPos, Colors::Snow, 0.0f, origin);
+	}
+
+	m_SpriteBatch->End();
 
     Present();
 }
@@ -296,6 +306,8 @@ void Game::CreateDevice()
     DX::ThrowIfFailed(context.As(&m_d3dContext));
 
     // TODO: Initialize device dependent objects here (independent of window size).
+	m_Font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), L"myfile.spritefont");
+	m_SpriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 	m_fxFactory = std::make_unique<DGSLEffectFactory>(m_d3dDevice.Get());
 	//load here
@@ -399,6 +411,10 @@ void Game::CreateResources()
     // TODO: Initialize windows-size dependent objects here.
 	m_Camera = std::make_unique<Camera>(m_StartPosition, SimpleMath::Vector3(0, 0, 0),
 		float(backBufferWidth) / float(backBufferHeight), backBufferWidth, backBufferHeight);
+
+	//set font position
+	m_FontPos.x = backBufferWidth / 2.0f;
+	m_FontPos.y = backBufferHeight / 2.0f;
 }
 
 void Game::OnDeviceLost()
@@ -418,6 +434,7 @@ void Game::OnDeviceLost()
 		ntt->ResetModel();
 	}
 
+	m_Font.reset();
     CreateDevice();
 
     CreateResources();

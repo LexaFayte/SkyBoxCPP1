@@ -101,5 +101,6 @@
     <None Include="packages.config" />
     <None Include="MazeWall.cmo" />
     <None Include="EndBox.cmo" />
+    <None Include="myfile.spritefont" />
   </ItemGroup>
 </Project>
