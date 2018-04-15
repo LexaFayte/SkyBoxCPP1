@@ -36,6 +36,7 @@ private:
 
     void Update(DX::StepTimer const& timer);
     void Render();
+	void ProcessCollisions();
 
     void Clear();
     void Present();
@@ -45,7 +46,8 @@ private:
 
     void OnDeviceLost();
 
-	void LoadMazeBlocks();
+	void LoadMazeAssets();
+	void ResetGame();
 
     // Device resources.
     HWND                                            m_window;
@@ -63,13 +65,6 @@ private:
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
 
-	// word, view, and projection matrices for 3D rendering
-	DirectX::SimpleMath::Matrix m_world;
-	DirectX::SimpleMath::Matrix m_view;
-	DirectX::SimpleMath::Matrix m_proj;
-	DirectX::SimpleMath::Vector3 m_cameraPos;
-	float m_pitch = 0;
-	float m_yaw = 0;
 
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	std::unique_ptr<DirectX::IEffectFactory> m_fxFactory;
@@ -86,9 +81,12 @@ private:
 	MazeMaker m_Maze;
 	const std::string k_MazeFileName = "TestMaze.txt";
 
-	std::vector<Entity*> ntts;
+	std::vector<Entity*> m_Entities;
+	std::unique_ptr<DirectX::Model> m_MazeFloor;
+	SimpleMath::Vector3 m_FloorPosition;
 
 	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;
 	bool mCollisionsEnabled = true;
-	bool collision = false;
+	bool m_Collision = false;
+	bool m_GameEnd = false;
 };

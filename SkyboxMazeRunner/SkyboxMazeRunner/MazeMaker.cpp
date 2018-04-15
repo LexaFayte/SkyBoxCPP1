@@ -34,7 +34,7 @@ bool MazeMaker::LoadMazeFromFile(std::string filename)
 		}
 		else
 		{
-			for (int i = 0; i < line.size(); ++i)
+			for (size_t i = 0; i < line.size(); ++i)
 			{
 				current = line[i] - 48;
 				switch (current)

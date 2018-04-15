@@ -89,6 +89,9 @@
     <Image Include="Wolf3D_EndPointUV.png">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="MazeTile1.jpg">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -102,5 +105,6 @@
     <None Include="MazeWall.cmo" />
     <None Include="EndBox.cmo" />
     <None Include="myfile.spritefont" />
+    <None Include="MazeFloor.cmo" />
   </ItemGroup>
 </Project>
