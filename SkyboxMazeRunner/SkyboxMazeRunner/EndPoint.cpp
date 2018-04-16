@@ -5,7 +5,7 @@ EndPoint::EndPoint() :Entity(EntityTag::End) {};
 EndPoint::EndPoint(Vector3 pos) :Entity(EntityTag::End), mPos(pos) {};
 EndPoint::EndPoint(int x, int z) :Entity(EntityTag::End) 
 {
-	mPos = Vector3(x * (200 * 0.06f), 4.0f, z * (200 * 0.06f));
+	mPos = Vector3(x * (200 * 0.06f), 2.0f, z * (200 * 0.06f));
 };
 
 EndPoint::~EndPoint() {};
@@ -13,7 +13,7 @@ EndPoint::~EndPoint() {};
 void EndPoint::LoadModel(ID3D11Device * device, const wchar_t * filename, IEffectFactory & fxFactory)
 {
 	mModel = Model::CreateFromCMO(device, filename, fxFactory);
-	for (int i = 0; i < mModel->meshes.size(); ++i)
+	for (size_t i = 0; i < mModel->meshes.size(); ++i)
 	{
 		mModel->meshes[i]->boundingBox.Center = mPos;
 	}

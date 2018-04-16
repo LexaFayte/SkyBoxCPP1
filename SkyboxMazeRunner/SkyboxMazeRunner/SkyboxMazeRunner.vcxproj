@@ -190,6 +190,7 @@
     <Image Include="cup.jpg" />
     <Image Include="directx.ico" />
     <Image Include="MazeBlockTex.png" />
+    <Image Include="MazeTile1.jpg" />
     <Image Include="Wolf3D_EndPointUV.png" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +200,7 @@
     <None Include="9mmAmmoBox.cmo" />
     <None Include="cup.cmo" />
     <None Include="EndBox.cmo" />
+    <None Include="MazeFloor.cmo" />
     <None Include="MazeWall.cmo" />
     <None Include="myfile.spritefont" />
     <None Include="packages.config" />

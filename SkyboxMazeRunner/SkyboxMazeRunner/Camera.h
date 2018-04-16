@@ -28,14 +28,16 @@ public:
 		return mPosition;
 	}
 
+	void SetPosition(SimpleMath::Vector3& position)
+	{
+		mPosition = position;
+		mBoundingSphere.sphere.Center = mPosition;
+		mPreviewMove = mPosition;
+	}
+
 	SimpleMath::Matrix getProj() const noexcept
 	{
 		return mProj;
-	}
-
-	void setPosition(const SimpleMath::Vector3 pos)
-	{
-		mPosition = pos;
 	}
 
 	SimpleMath::Vector3 const getPreviewMove() const

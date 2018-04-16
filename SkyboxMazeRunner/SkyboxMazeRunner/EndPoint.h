@@ -13,7 +13,7 @@ public:
 	virtual void Render(ID3D11DeviceContext* dc, const CommonStates &states, Matrix view, Matrix proj) override;
 	virtual void Update(float deltaTime) override;
 	virtual void ResetModel() override;
-	virtual const Model& GetModel() const override { return *mModel; };
+	virtual const Model& GetModel() override { return *mModel; };
 	void LoadModel(ID3D11Device* device, const wchar_t* filename, DirectX::IEffectFactory &fxFactory);
 
 private:

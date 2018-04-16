@@ -15,8 +15,8 @@ public:
 	const int getRows() const noexcept { return m_Height; };
 	const int getCols() const noexcept { return m_Width; };
 	std::vector<std::vector<int>>& getMaze() noexcept { return m_Maze; };
-	DirectX::SimpleMath::Vector3& const getStartPosition() noexcept{ return m_StartingPosition; }
-	DirectX::SimpleMath::Vector3& const getEndPosition() noexcept { return m_EndPosition; }
+	DirectX::SimpleMath::Vector3& getStartPosition() noexcept{ return m_StartingPosition; }
+	DirectX::SimpleMath::Vector3& getEndPosition() noexcept { return m_EndPosition; }
 
 	bool LoadMazeFromFile(std::string filename);
 
