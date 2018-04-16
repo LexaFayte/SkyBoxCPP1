@@ -78,63 +78,103 @@ void Game::Update(DX::StepTimer const& timer)
 	float time = float(timer.GetTotalSeconds());
 	auto kb = m_keyboard->GetState();	
 	auto mouse = m_mouse->GetState();
-	auto gamepad = m_GamePad->GetState(0);
+	auto gamepad = m_GamePad->GetState(PLAYER_ONE);
 
-	if (kb.Z)
+	// Game Inputs (for non-game mechanic controls)
+	if (kb.Escape || gamepad.buttons.back)
+	{
+		PostQuitMessage(0);
+	}
+	
+	if (kb.Z || gamepad.buttons.rightStick)
 	{
 		mCollisionsEnabled = !mCollisionsEnabled;
 	}
 
-	if (mouse.positionMode == Mouse::MODE_RELATIVE)
+	if (m_GameEnd && kb.E || gamepad.buttons.a)
 	{
-		m_Camera->Update(mouse, kb, gamepad);
+		//restart the game
+		ResetGame();
 	}
 
-	m_mouse->SetMode(Mouse::MODE_RELATIVE);
 
-	//check collision and move
-	collision = false;
-	Vector3 nttPos;
-
-	if (mCollisionsEnabled)
+	if (!m_GameEnd)
 	{
-		Vector3 previewMove = m_Camera->getPreviewMove();
-		CollisionSphere cameraCollider = m_Camera->getCollisionSphere();
-	
-		for (int i = 0; i < ntts.size(); ++i)
+		if (mouse.positionMode == Mouse::MODE_RELATIVE)
 		{
-			Model nttModel = ntts[i]->GetModel();
+			m_Camera->Update(mouse, kb, gamepad);
+		}
 
-			for (int j = 0; j < nttModel.meshes.size(); ++j)
+		m_mouse->SetMode(Mouse::MODE_RELATIVE);
+
+		//only check if collisions are enabled
+		if (mCollisionsEnabled)
+		{
+			ProcessCollisions();
+		}
+		else
+		{
+			m_Camera->Move();
+		}
+
+		//WORLD MATRIX == MODEL MATRIX (SAME THING; TWO DIFFERENT NAMES, BUT COMPLETELY ANALOGOUS)
+		for (Entity*& ntt : m_Entities)
+		{
+			ntt->Update(time);
+		}
+	}
+    elapsedTime;
+}
+
+void Game::ProcessCollisions()
+{
+	m_Collision = false;
+	Vector3 nttPos;
+	int nttIndex = 0;
+
+
+	Vector3 previewMove = m_Camera->getPreviewMove();
+	CollisionSphere cameraCollider = m_Camera->getCollisionSphere();
+
+	for (size_t i = 0; i < m_Entities.size(); ++i)
+	{
+		Model nttModel = m_Entities[i]->GetModel();
+
+		for (size_t j = 0; j < nttModel.meshes.size(); ++j)
+		{
+			if (nttModel.meshes[j]->boundingBox.Intersects(cameraCollider.sphere))
 			{
-				if (nttModel.meshes[j]->boundingBox.Intersects(cameraCollider.sphere))
-				{
-					nttPos = nttModel.meshes[j]->boundingBox.Center;
-					collision = true;
-					goto continueUpdate;
-				}
+				nttPos = nttModel.meshes[j]->boundingBox.Center;
+				nttIndex = i;
+				m_Collision = true;
+				goto continueProcessing;
 			}
 		}
 	}
-
-	continueUpdate:
 	
-	if (!collision)
+
+	continueProcessing:
+
+	if (!m_Collision)
 	{
 		m_Camera->Move();
 	}
 	else
 	{
-		m_Camera->handleCollision(nttPos);
-	}
+		switch (m_Entities[nttIndex]->GetTag())
+		{
+			case Entity::EntityTag::Wall:
+				m_Camera->handleCollision(nttPos);
+				break;
 
-	//WORLD MATRIX == MODEL MATRIX (SAME THING; TWO DIFFERENT NAMES, BUT COMPLETELY ANALOGOUS)
-	for (Entity*& ntt : ntts)
-	{
-		ntt->Update(time);
+			case Entity::EntityTag::End:
+				m_GameEnd = true;
+				break;
+
+		}
 	}
-    elapsedTime;
 }
+
 
 // Draws the scene.
 void Game::Render()
@@ -148,19 +188,41 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
+	//Derived *derivedPointer = dynamic_cast<Derived*>(basePointer.get());
 
-	for (Entity*& ntt : ntts)
+	Matrix floorWord = Matrix::CreateScale(10) * Matrix::CreateTranslation(m_FloorPosition);
+	m_MazeFloor->Draw(m_d3dContext.Get(), *m_states, floorWord, m_Camera->getView(), m_Camera->getProj());
+
+	for (Entity*& ntt : m_Entities)
 	{
 		ntt->Render(m_d3dContext.Get(), *m_states, m_Camera->getView(), m_Camera->getProj());
 	}
 
 	m_SpriteBatch->Begin();
-	if (collision)
+	if (m_GameEnd)
+	{
+		const wchar_t* text;
+		
+		if (!m_GamePad->GetState(PLAYER_ONE).IsConnected())
+		{
+			text = L"MAZE COMPLETE\n\nPress E to star again or ESC to exit";
+		}
+		else
+		{
+			text = L"MAZE COMPLETE\n\nPress A to star again or BACK to exit";
+		}
+
+		Vector2 origin = m_Font->MeasureString(text) / 2.0f;
+		m_Font->DrawString(m_SpriteBatch.get(), text, m_FontPos, Colors::Snow, 0.0f, origin);
+	}
+
+	if (m_Collision && !m_GameEnd)
 	{
 		const wchar_t* text = L"Collision!";
 		Vector2 origin = m_Font->MeasureString(text) / 2.0f;
 		m_Font->DrawString(m_SpriteBatch.get(), text, m_FontPos, Colors::Snow, 0.0f, origin);
 	}
+
 
 	m_SpriteBatch->End();
 
@@ -310,9 +372,14 @@ void Game::CreateDevice()
 	m_SpriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 	m_fxFactory = std::make_unique<DGSLEffectFactory>(m_d3dDevice.Get());
+	DGSLEffectFactory *factoryTempPtr = dynamic_cast<DGSLEffectFactory*>(m_fxFactory.get());
+	factoryTempPtr->SetSharing(false);
+	//ID3D11PixelShader ps;
+	//factoryTempPtr->CreatePixelShader(L"FlashLight")
+	
 	//load here
-	LoadMazeBlocks();
-	m_world = Matrix::Identity;
+	LoadMazeAssets();
+	factoryTempPtr = nullptr;
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -429,7 +496,7 @@ void Game::OnDeviceLost()
 	m_states.reset();
 	m_fxFactory.reset();
 	
-	for (Entity*& ntt : ntts)
+	for (Entity*& ntt : m_Entities)
 	{
 		ntt->ResetModel();
 	}
@@ -440,11 +507,12 @@ void Game::OnDeviceLost()
     CreateResources();
 }
 
-void Game::LoadMazeBlocks()
+void Game::LoadMazeAssets()
 {
 	int rows = m_Maze.getRows();
 	int cols = m_Maze.getCols();
 	std::vector<std::vector<int>> maze = m_Maze.getMaze();
+
 
 	for (int row = 0; row < rows; ++row)
 	{
@@ -454,14 +522,23 @@ void Game::LoadMazeBlocks()
 			{
 				Wall *temp = new Wall (row, col);
 				temp->LoadModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory);//L"9mmAmmoBox.cmo"
-				ntts.push_back(temp);
+				m_Entities.push_back(temp);
 			}
 			else if (maze[row][col] == 3)
 			{
 				EndPoint *epPtr = new EndPoint(row, col);
 				epPtr->LoadModel(m_d3dDevice.Get(), L"EndBox.cmo", *m_fxFactory);
-				ntts.push_back(epPtr);
+				m_Entities.push_back(epPtr);
 			}
 		}
 	}
+	m_MazeFloor = Model::CreateFromCMO(m_d3dDevice.Get(), L"MazeFloor.cmo", *m_fxFactory);
+	m_FloorPosition = Vector3(cols/2*6, -8, rows*8);
+}
+
+void Game::ResetGame()
+{
+	m_Camera->SetPosition(m_StartPosition);
+	m_GameEnd = false;
+	m_Collision = false;
 }

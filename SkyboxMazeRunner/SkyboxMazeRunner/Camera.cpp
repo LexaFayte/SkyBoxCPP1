@@ -33,11 +33,6 @@ void Camera::CalculateView()
 
 void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState, const GamePad::State& gamepadState)
 {
-	if (keyboardState.Escape || gamepadState.buttons.back)
-	{
-		PostQuitMessage(0);
-	}
-
 	SimpleMath::Vector3 delta;
 	SimpleMath::Vector3 move = SimpleMath::Vector3::Zero;
 
@@ -114,9 +109,6 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 
 	//collision detection here
 	mPreviewMove = mPosition + move;
-
-	//mPosition += move;
-
 	CalculateLookAt();
 	CalculateView();
 }

@@ -12,7 +12,7 @@ Wall::~Wall() {}
 void Wall::LoadModel(ID3D11Device * device, const wchar_t * filename, IEffectFactory & fxFactory)
 {
 	m_model = Model::CreateFromCMO(device, filename, fxFactory);
-	for (int i = 0; i < m_model->meshes.size(); ++i)
+	for (size_t i = 0; i < m_model->meshes.size(); ++i)
 	{
 		m_model->meshes[i]->boundingBox.Center = m_Pos;
 	}

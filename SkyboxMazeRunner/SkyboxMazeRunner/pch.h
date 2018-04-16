@@ -27,6 +27,9 @@
 #define NOHELP
 
 #define WIN32_LEAN_AND_MEAN
+
+#define PLAYER_ONE 0
+
 #include <windows.h>
 
 #include <wrl/client.h>
