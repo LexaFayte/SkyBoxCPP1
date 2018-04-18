@@ -1,5 +1,4 @@
 #include "List.h"
-#include <utility>
 #include <iostream>
 
 namespace Storage
@@ -17,14 +16,7 @@ namespace Storage
 	template<class T>
 	List<T>::~List()
 	{
-		while (pHead != nullptr)
-		{
-			Node<T>* pCurrent = pHead;
-			pHead = pHead->pNext;
-
-			delete pCurrent;
-			pCurrent = nullptr;
-		}
+		delete pHead;
 	}
 
 	// ----------------------------------------------------------------------------------------------------
@@ -38,7 +30,7 @@ namespace Storage
 		Node<T>* conductor = other.pHead->pNext;
 		while (conductor != nullptr)
 		{
-			Add(conductor->Item);
+			CopyNode(*conductor);
 			conductor = conductor->pNext;
 		}
 	}
@@ -59,7 +51,7 @@ namespace Storage
 		Node<T>* conductor = other.pHead->pNext;
 		while (conductor != nullptr)
 		{
-			Add(conductor->Item);
+			CopyNode(*conductor);
 			conductor = conductor->pNext;
 		}
 
@@ -155,12 +147,7 @@ namespace Storage
 	template<class T>
 	void List<T>::Clear()
 	{
-		while (pHead != nullptr)
-		{
-			Node<T>* pCurrent = pHead;
-			pHead = pHead->pNext;
-			delete pCurrent;
-		}
+		delete pHead;
 	}
 
 	// ----------------------------------------------------------------------------------------------------
@@ -226,5 +213,25 @@ namespace Storage
 			std::cout << conductor->Item << std::endl;
 			conductor = conductor->pNext;
 		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------
+
+	template<class T>
+	void List<T>::CopyNode(const Node<T>& n)
+	{
+		Node<T>* pNewNode = new Node<T>(n);
+		pNewNode->pNext = nullptr;
+		Node<T>* pEnd = pHead;
+		Node<T>* pCurrent = pHead;
+
+		while (pCurrent != nullptr)
+		{
+			pEnd = pCurrent;
+			pCurrent = pCurrent->pNext;
+		}
+
+		pEnd->pNext = pNewNode;
+		++mCount;
 	}
 }
