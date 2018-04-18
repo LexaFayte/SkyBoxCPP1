@@ -1,5 +1,5 @@
 #pragma once
-
+#include <utility>
 namespace Storage
 {
 	template<class T>
@@ -37,6 +37,45 @@ namespace Storage
 				// Empty
 			}
 
+			~Node()
+			{
+				delete pNext;
+			}
+
+			Node(const Node<T>& other) : Item(other.Item),
+				pNext(other.pNext)
+			{
+
+			}
+
+			Node<T>& operator=(const Node<T>& other)
+			{
+				if (*this == other)
+				{
+					return *this;
+				}
+				Item = other.Item;
+				pNext = other.pNext;
+				return *this;
+			}
+
+			Node(Node<T>&& other) noexcept : Item{ std::exchange(other.Item, 0) },
+				pNext{ std::exchange(other.pNext, nullptr) }
+			{
+
+			}
+
+			Node<T>& operator=(Node<T>&& other) noexcept
+			{
+				if (*this == other)
+				{
+					return *this;
+				}
+
+				Item = std::exchange(other.Item, 0);
+				pNext = std::exchange(other.pNext, nullptr);
+			}
+
 			T Item;
 			Node* pNext;
 		};
@@ -46,5 +85,6 @@ namespace Storage
 
 		void CreateNode(Node<T>* pEnd, const T& item);
 		void RemoveNode(Node<T>* pNode, Node<T>* pPrevious);
+		void CopyNode(const Node<T>& n);
 	};
 }
