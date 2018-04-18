@@ -50,7 +50,7 @@ namespace Storage
 
 			Node<T>& operator=(const Node<T>& other)
 			{
-				if (*this == other)
+				if (this == &other)
 				{
 					return *this;
 				}
@@ -67,7 +67,7 @@ namespace Storage
 
 			Node<T>& operator=(Node<T>&& other) noexcept
 			{
-				if (*this == other)
+				if (this == &other)
 				{
 					return *this;
 				}

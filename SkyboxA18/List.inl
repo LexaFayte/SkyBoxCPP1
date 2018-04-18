@@ -41,7 +41,7 @@ namespace Storage
 	List<T>& List<T>::operator=(const List<T>& other)
 	{
 		std::cout << "COPY ASSINGNEMT" << std::endl;
-		if (*this == other)
+		if (this == &other)
 		{
 			return *this;
 		}
@@ -73,7 +73,7 @@ namespace Storage
 	List<T>& List<T>::operator=(List<T>&& other) noexcept
 	{
 		std::cout << "MOVE ASSIGNMENT" << std::endl;
-		if (*this == other)
+		if (this == &other)
 		{
 			return *this;
 		}
