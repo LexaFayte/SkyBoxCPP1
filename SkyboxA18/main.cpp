@@ -4,10 +4,13 @@
 int main()
 {
 	{
+
+		int a = 4;
 		Storage::List<int> listOfInts;
 		listOfInts.Add(1);
 		listOfInts.Add(5);
 		listOfInts.Add(28);
+		listOfInts.Add(std::move(a));
 		std::cout << "LIST OF INTS:" << std::endl;
 		listOfInts.Print();
 

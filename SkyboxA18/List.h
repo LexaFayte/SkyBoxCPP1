@@ -18,6 +18,7 @@ namespace Storage
 		unsigned int Count() const { return mCount; }
 
 		void Add(const T& item);
+		void Add(T&& item);
 		void Remove(const T& item);
 		void RemoveAt(int index);
 		void Clear();
@@ -45,11 +46,12 @@ namespace Storage
 			Node(const Node<T>& other) : Item(other.Item),
 				pNext(other.pNext)
 			{
-
+				std::cout << "COPY CONSTRUCTOR NODE" << std::endl;
 			}
 
 			Node<T>& operator=(const Node<T>& other)
 			{
+				std::cout << "COPY ASSIGNMENT NODE" << std::endl;
 				if (this == &other)
 				{
 					return *this;
@@ -62,11 +64,12 @@ namespace Storage
 			Node(Node<T>&& other) noexcept : Item{ std::exchange(other.Item, 0) },
 				pNext{ std::exchange(other.pNext, nullptr) }
 			{
-
+				std::cout << "MOVE CONSTRUCTOR NODE" << std::endl;
 			}
 
 			Node<T>& operator=(Node<T>&& other) noexcept
 			{
+				std::cout << "MOVE ASSIGNMENT NODE" << std::endl;
 				if (this == &other)
 				{
 					return *this;
