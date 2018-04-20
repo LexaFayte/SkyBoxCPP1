@@ -102,6 +102,24 @@ namespace Storage
 	// ----------------------------------------------------------------------------------------------------
 
 	template<class T>
+	void List<T>::Add(T&& item)
+	{
+		T movedItem(std::move(item));
+		Node<T>* pEnd = pHead;
+		Node<T>* pCurrent = pHead;
+
+		while (pCurrent != nullptr)
+		{
+			pEnd = pCurrent;
+			pCurrent = pCurrent->pNext;
+		}
+
+		CreateNode(pEnd, movedItem);
+	}
+
+	// ----------------------------------------------------------------------------------------------------
+
+	template<class T>
 	void List<T>::Remove(const T& item)
 	{
 		Node<T>* pCurrent = pHead;
@@ -148,6 +166,7 @@ namespace Storage
 	void List<T>::Clear()
 	{
 		delete pHead;
+		mCount = 0;
 	}
 
 	// ----------------------------------------------------------------------------------------------------
