@@ -7,6 +7,8 @@
 #include "StepTimer.h"
 #include "Camera.h"
 #include "MazeMaker.h"
+#include "ObjectPool.h"
+#include "AssetManager.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -47,6 +49,7 @@ private:
     void OnDeviceLost();
 
 	void LoadMazeAssets();
+	void LoadMaze();
 	void ResetGame();
 
     // Device resources.
@@ -65,7 +68,7 @@ private:
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
 
-
+	AssetManager m_AssetManager;
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	std::unique_ptr<DirectX::IEffectFactory> m_fxFactory;
 
@@ -78,11 +81,13 @@ private:
 	SimpleMath::Vector2 m_FontPos;
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
 
+
+	ObjectPool<Wall*> m_Walls;
 	MazeMaker m_Maze;
 	const std::string k_MazeFileName = "TestMaze.txt";
 
 	std::vector<Entity*> m_Entities;
-	std::unique_ptr<DirectX::Model> m_MazeFloor;
+	DirectX::Model m_MazeFloor;
 	SimpleMath::Vector3 m_FloorPosition;
 
 	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;

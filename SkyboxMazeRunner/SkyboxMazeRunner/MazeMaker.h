@@ -4,12 +4,28 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <ctime>
 #include "Entity.h"
 
 class MazeMaker
 {
+private:
+	size_t m_Size = 0;
+	int m_Width = 0;
+	int m_Height = 0;
+	DirectX::SimpleMath::Vector3 m_StartingPosition = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 m_EndPosition = DirectX::SimpleMath::Vector3::Zero;
+	std::vector<std::vector<int>> m_Maze;
+
+	void InitDataStructure(int rows, int cols);
+	void GenerateStartAndEnd();
+	void GenerateMazeWalls();
+	void Divide(int x, int y, int width, int height, bool horizontal);
+	bool ChooseOrientation(int width, int height);
+	void BuildMaze();
+
 public:
-	MazeMaker() {};
+	MazeMaker() { std::srand(time(0)); };
 	~MazeMaker() {};
 
 	const int getRows() const noexcept { return m_Height; };
@@ -19,13 +35,6 @@ public:
 	DirectX::SimpleMath::Vector3& getEndPosition() noexcept { return m_EndPosition; }
 
 	bool LoadMazeFromFile(std::string filename);
-
-private:
-	int m_Width = 0;
-	int m_Height = 0;
-	DirectX::SimpleMath::Vector3 m_StartingPosition = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Vector3 m_EndPosition = DirectX::SimpleMath::Vector3::Zero;
-	std::vector<std::vector<int>> m_Maze;
-
-	void initDataStructure(int rows, int cols);
+	void NewMaze(int mazeSize);
+	void PrintMaze();
 };
