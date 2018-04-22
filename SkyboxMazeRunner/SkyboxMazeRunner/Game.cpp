@@ -34,11 +34,8 @@ void Game::Initialize(HWND window, int width, int height)
     m_outputWidth = std::max(width, 1);
     m_outputHeight = std::max(height, 1);
 
-	if (!m_Maze.LoadMazeFromFile(k_MazeFileName))
-	{
-		PostQuitMessage(0);
-	}
-
+	m_Entities.reserve(256);
+	m_Maze.NewMaze(11);
 	Vector3 mazeStart = m_Maze.getStartPosition();
 	m_StartPosition = Vector3(mazeStart.x * (200 * 0.06f), 2.0f, mazeStart.z *(200 * 0.06f));
 
@@ -138,18 +135,15 @@ void Game::ProcessCollisions()
 
 	for (size_t i = 0; i < m_Entities.size(); ++i)
 	{
-		Model nttModel = m_Entities[i]->GetModel();
-
-		for (size_t j = 0; j < nttModel.meshes.size(); ++j)
+		BoundingBox aabb = m_Entities[i]->GetAABB();
+		if (aabb.Intersects(cameraCollider.sphere))
 		{
-			if (nttModel.meshes[j]->boundingBox.Intersects(cameraCollider.sphere))
-			{
-				nttPos = nttModel.meshes[j]->boundingBox.Center;
-				nttIndex = i;
-				m_Collision = true;
-				goto continueProcessing;
-			}
+			nttPos = aabb.Center;
+			nttIndex = i;
+			m_Collision = true;
+			goto continueProcessing;
 		}
+		
 	}
 	
 
@@ -189,9 +183,21 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
 	//Derived *derivedPointer = dynamic_cast<Derived*>(basePointer.get());
+	m_MazeFloor.UpdateEffects([&](IEffect* effect)
+	{
+		auto lights = dynamic_cast<IEffectLights*>(effect);
+		if (lights)
+		{
+			lights->SetLightingEnabled(true);
+			lights->SetPerPixelLighting(true);
+			lights->SetLightEnabled(0, true);
+			lights->SetLightEnabled(1, false);
+			lights->SetLightEnabled(2, false);
+		}
+	});
 
 	Matrix floorWord = Matrix::CreateScale(10) * Matrix::CreateTranslation(m_FloorPosition);
-	m_MazeFloor->Draw(m_d3dContext.Get(), *m_states, floorWord, m_Camera->getView(), m_Camera->getProj());
+	m_MazeFloor.Draw(m_d3dContext.Get(), *m_states, floorWord, m_Camera->getView(), m_Camera->getProj());
 
 	for (Entity*& ntt : m_Entities)
 	{
@@ -371,14 +377,15 @@ void Game::CreateDevice()
 	m_Font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), L"myfile.spritefont");
 	m_SpriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
-	m_fxFactory = std::make_unique<DGSLEffectFactory>(m_d3dDevice.Get());
-	DGSLEffectFactory *factoryTempPtr = dynamic_cast<DGSLEffectFactory*>(m_fxFactory.get());
+	m_fxFactory = std::make_unique<EffectFactory>(m_d3dDevice.Get());
+	EffectFactory *factoryTempPtr = dynamic_cast<EffectFactory*>(m_fxFactory.get());
 	factoryTempPtr->SetSharing(false);
 	//ID3D11PixelShader ps;
 	//factoryTempPtr->CreatePixelShader(L"FlashLight")
 	
 	//load here
 	LoadMazeAssets();
+	LoadMaze();
 	factoryTempPtr = nullptr;
 }
 
@@ -509,6 +516,13 @@ void Game::OnDeviceLost()
 
 void Game::LoadMazeAssets()
 {
+	m_AssetManager.RegisterModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory, Entity::EntityTag::Wall);
+	m_AssetManager.RegisterModel(m_d3dDevice.Get(), L"EndBox.cmo", *m_fxFactory, Entity::EntityTag::End);
+	m_AssetManager.RegisterModel(m_d3dDevice.Get(), L"MazeFloor.cmo", *m_fxFactory, Entity::EntityTag::Floor);
+}
+
+void Game::LoadMaze()
+{
 	int rows = m_Maze.getRows();
 	int cols = m_Maze.getCols();
 	std::vector<std::vector<int>> maze = m_Maze.getMaze();
@@ -518,26 +532,51 @@ void Game::LoadMazeAssets()
 	{
 		for (int col = 0; col < cols; ++col)
 		{
-			if (maze[row][col] == 0)
+			if (maze[row][col] == 1)
 			{
-				Wall *temp = new Wall (row, col);
-				temp->LoadModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory);//L"9mmAmmoBox.cmo"
+				Wall* temp = m_Walls.GetNext();
+				temp->SetPosition(row, col);
+				temp->SetModel(m_AssetManager.GetModel(Entity::EntityTag::Wall));
+				//temp->LoadModel(m_d3dDevice.Get(), L"MazeWall.cmo", *m_fxFactory);//L"9mmAmmoBox.cmo"
 				m_Entities.push_back(temp);
 			}
 			else if (maze[row][col] == 3)
 			{
 				EndPoint *epPtr = new EndPoint(row, col);
-				epPtr->LoadModel(m_d3dDevice.Get(), L"EndBox.cmo", *m_fxFactory);
+				epPtr->SetModel(m_AssetManager.GetModel(Entity::EntityTag::End));
+				//epPtr->LoadModel(m_d3dDevice.Get(), L"EndBox.cmo", *m_fxFactory);
 				m_Entities.push_back(epPtr);
 			}
 		}
 	}
-	m_MazeFloor = Model::CreateFromCMO(m_d3dDevice.Get(), L"MazeFloor.cmo", *m_fxFactory);
-	m_FloorPosition = Vector3(cols/2*6, -8, rows*8);
+	m_MazeFloor = m_AssetManager.GetModel(Entity::EntityTag::Floor);//Model::CreateFromCMO(m_d3dDevice.Get(), L"MazeFloor.cmo", *m_fxFactory);
+	m_FloorPosition = Vector3(cols / 2 * 6, -8, rows * 8);
 }
 
 void Game::ResetGame()
 {
+	for (int i = m_Entities.size()-1; i >= 0 ; --i)
+	{
+		if(m_Entities[i]->GetTag() == Entity::EntityTag::Wall)
+		{
+			m_Walls.Return((Wall*)m_Entities[i]);
+		}
+		
+		m_Entities.erase(m_Entities.begin() + i);
+	}
+
+	m_Maze.NewMaze(11);
+	m_StartPosition = m_Maze.getStartPosition();
+	//auto it = std::find_if(m_Entities.begin(), m_Entities.end(), [&](Entity* e)
+	//{
+	//	return e->GetTag() == Entity::EntityTag::End;
+	//});
+
+	//int index = std::distance(m_Entities.begin(), it);
+	//m_Entities[index]->SetPosition(m_StartPosition.x, m_StartPosition.z);
+
+	LoadMaze();
+
 	m_Camera->SetPosition(m_StartPosition);
 	m_GameEnd = false;
 	m_Collision = false;
