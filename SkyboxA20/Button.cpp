@@ -14,6 +14,6 @@ void _ButtonCallBack::Execute(CallBack c)
 {
 	for (auto& function : c.mRegisteredFunctions)
 	{
-		function();
+		function.mFunction();
 	}
 }
