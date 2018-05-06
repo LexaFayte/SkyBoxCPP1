@@ -22,14 +22,13 @@ public:
 
 	virtual void Render(ID3D11DeviceContext* dc, const DirectX::CommonStates &states, SimpleMath::Matrix view, SimpleMath::Matrix proj) {};
 	virtual void Update(float deltaTime) {};
-	virtual void ResetModel() {};
 	virtual void SetPosition(int x, int z) {};
-	virtual const Model& GetModel() { return m; };
-	virtual const BoundingBox& GetAABB() { return mAABB; };
+	virtual const Model& GetModel() { return m_Model; };
+	virtual const BoundingBox& GetAABB() { return m_AABB; };
 
-	virtual const EntityTag& GetTag() noexcept { return tag; };
+	virtual const EntityTag& GetTag() noexcept { return m_Tag; };
 protected:
-	EntityTag tag;
-	Model m;
-	BoundingBox mAABB;
+	EntityTag m_Tag;
+	Model m_Model;
+	BoundingBox m_AABB;
 };

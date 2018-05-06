@@ -10,12 +10,12 @@
 class MazeMaker
 {
 private:
-	size_t m_Size = 0;
-	int m_Width = 0;
-	int m_Height = 0;
-	DirectX::SimpleMath::Vector3 m_StartingPosition = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Vector3 m_EndPosition = DirectX::SimpleMath::Vector3::Zero;
-	std::vector<std::vector<int>> m_Maze;
+	size_t mSize = 0;
+	int mWidth = 0;
+	int mHeight = 0;
+	DirectX::SimpleMath::Vector3 mStartingPosition = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 mEndPosition = DirectX::SimpleMath::Vector3::Zero;
+	std::vector<std::vector<int>> mMaze;
 
 	void InitDataStructure(int rows, int cols);
 	void GenerateStartAndEnd();
@@ -28,11 +28,11 @@ public:
 	MazeMaker() { std::srand(time(0)); };
 	~MazeMaker() {};
 
-	const int getRows() const noexcept { return m_Height; };
-	const int getCols() const noexcept { return m_Width; };
-	std::vector<std::vector<int>>& getMaze() noexcept { return m_Maze; };
-	DirectX::SimpleMath::Vector3& getStartPosition() noexcept{ return m_StartingPosition; }
-	DirectX::SimpleMath::Vector3& getEndPosition() noexcept { return m_EndPosition; }
+	const int getRows() const noexcept { return mHeight; };
+	const int getCols() const noexcept { return mWidth; };
+	std::vector<std::vector<int>>& getMaze() noexcept { return mMaze; };
+	DirectX::SimpleMath::Vector3& getStartPosition() noexcept{ return mStartingPosition; }
+	DirectX::SimpleMath::Vector3& getEndPosition() noexcept { return mEndPosition; }
 
 	bool LoadMazeFromFile(std::string filename);
 	void NewMaze(int mazeSize);
