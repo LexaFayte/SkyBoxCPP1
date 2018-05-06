@@ -3,40 +3,40 @@
 
 Wall* ObjectPool<Wall*>::GetNext()
 {
-	auto result = std::find(mObjectsInUse.begin(), mObjectsInUse.end(), FREE);
-	size_t index = std::distance(mObjectsInUse.begin(), result);
+	auto result = std::find(m_ObjectsInUse.begin(), m_ObjectsInUse.end(), FREE);
+	size_t index = std::distance(m_ObjectsInUse.begin(), result);
 
-	if(result == mObjectsInUse.end())
+	if(result == m_ObjectsInUse.end())
 	{
-		index = mPoolSize;
+		index = m_PoolSize;
 		Expand();	
 	}
 	
-	mObjectsInUse[index] = USING;
-	return mObjects[index];
+	m_ObjectsInUse[index] = USING;
+	return m_Objects[index];
 }
 
 void ObjectPool<Wall*>::Return(Wall* w)
 {
-	auto result = std::find(mObjects.begin(), mObjects.end(), w);
+	auto result = std::find(m_Objects.begin(), m_Objects.end(), w);
 
-	if (result != mObjects.end())
+	if (result != m_Objects.end())
 	{
-		int index = std::distance(mObjects.begin(), result);
-		mObjectsInUse[index] = FREE;
+		int index = std::distance(m_Objects.begin(), result);
+		m_ObjectsInUse[index] = FREE;
 	}
 }
 
 void ObjectPool<Wall*>::Expand()
 {
-	size_t currentSize = mPoolSize;
-	mPoolSize += 100;	
-	mObjects.reserve(100);
-	mObjectsInUse.reserve(100);
+	size_t currentSize = m_PoolSize;
+	m_PoolSize += 100;	
+	m_Objects.reserve(100);
+	m_ObjectsInUse.reserve(100);
 
-	for (size_t i = currentSize; i < mPoolSize; ++i)
+	for (size_t i = currentSize; i < m_PoolSize; ++i)
 	{
-		mObjects.emplace_back(new Wall());
-		mObjectsInUse.push_back(FREE);
+		m_Objects.emplace_back(new Wall());
+		m_ObjectsInUse.push_back(FREE);
 	}
 }

@@ -12,24 +12,22 @@ public:
 
 	virtual void Render(ID3D11DeviceContext* dc, const CommonStates &states, Matrix view, Matrix proj) override;
 	virtual void Update(float deltaTime) override;
-	virtual void ResetModel() override;
 	virtual void SetPosition(int x, int z) override 
 	{
-		mPos = ConvertPosition(x,z);
-		mAABB.Center = mPos;
+		m_Position = ConvertPosition(x,z);
+		m_AABB.Center = m_Position;
 	};
 
-	virtual const Model& GetModel() override { return mModel; };
+	virtual const Model& GetModel() override { return m_Model; };
 	virtual const BoundingBox& GetAABB() override { return m_AABB; };
-	void LoadModel(ID3D11Device* device, const wchar_t* filename, DirectX::IEffectFactory &fxFactory);
 	void SetModel(Model& m);
 
 private:
-	int floatDir = 1;
-	float yPos = 2.0f;
-	DirectX::Model mModel;
-	Vector3 mPos = Vector3::Zero;
-	Matrix mWorld = Matrix::Identity;
+	int m_FloatDirection = 1;
+	float m_PositonY = 2.0f;
+	DirectX::Model m_Model;
+	Vector3 m_Position = Vector3::Zero;
+	Matrix m_World = Matrix::Identity;
 	BoundingBox m_AABB;
 
 	Vector3 ConvertPosition(int x, int z);

@@ -159,6 +159,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EndPoint.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Floor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="MazeMaker.h" />
@@ -174,6 +175,7 @@
     </ClCompile>
     <ClCompile Include="EndPoint.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MazeMaker.cpp" />
@@ -190,8 +192,6 @@
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="9mmAmmoBox.jpg" />
-    <Image Include="cup.jpg" />
     <Image Include="directx.ico" />
     <Image Include="MazeBlockTex.png" />
     <Image Include="MazeTile1.jpg" />
@@ -201,8 +201,6 @@
     <Manifest Include="settings.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="9mmAmmoBox.cmo" />
-    <None Include="cup.cmo" />
     <None Include="EndBox.cmo" />
     <None Include="MazeFloor.cmo" />
     <None Include="MazeWall.cmo" />

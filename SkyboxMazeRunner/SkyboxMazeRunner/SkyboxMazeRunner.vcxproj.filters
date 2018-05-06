@@ -49,6 +49,9 @@
     <ClInclude Include="AssetManager.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="Floor.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -81,18 +84,15 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="cup.jpg">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="9mmAmmoBox.jpg">
       <Filter>Assets</Filter>
     </Image>
     <Image Include="MazeBlockTex.png">
@@ -111,8 +111,6 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cup.cmo" />
-    <None Include="9mmAmmoBox.cmo" />
     <None Include="packages.config" />
     <None Include="MazeWall.cmo" />
     <None Include="EndBox.cmo" />
