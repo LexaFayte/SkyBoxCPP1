@@ -9,29 +9,20 @@
 #include "MazeMaker.h"
 #include "ObjectPool.h"
 #include "AssetManager.h"
+#include "Floor.h"
 
-// A basic game implementation that creates a D3D11 device and
-// provides a game loop.
 class Game
 {
 public:
 
     Game();
-
-    // Initialization and management
     void Initialize(HWND window, int width, int height);
-
-    // Basic game loop
     void Tick();
-
-    // Messages
     void OnActivated();
     void OnDeactivated();
     void OnSuspending();
     void OnResuming();
     void OnWindowSizeChanged(int width, int height);
-
-    // Properties
     void GetDefaultSize( int& width, int& height ) const;
 
 private:
@@ -68,7 +59,6 @@ private:
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
 
-	AssetManager m_AssetManager;
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	std::unique_ptr<DirectX::IEffectFactory> m_fxFactory;
 
@@ -76,19 +66,19 @@ private:
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 	std::unique_ptr<DirectX::GamePad> m_GamePad;
 	std::unique_ptr<DirectX::SpriteFont> m_Font;
-	std::unique_ptr<Camera> m_Camera;
-
-	SimpleMath::Vector2 m_FontPos;
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
+	std::unique_ptr<Camera> m_Camera;
+	std::unique_ptr<Floor> m_Floor;
+
+	AssetManager m_AssetManager;
+	SimpleMath::Vector2 m_FontPos;
 
 
-	ObjectPool<Wall*> m_Walls;
 	MazeMaker m_Maze;
 	const std::string k_MazeFileName = "TestMaze.txt";
 
-	std::vector<Entity*> m_Entities;
-	DirectX::Model m_MazeFloor;
-	SimpleMath::Vector3 m_FloorPosition;
+	std::vector<Entity*> m_CollidableEntities;
+	ObjectPool<Wall*> m_Walls;
 
 	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;
 	bool mCollisionsEnabled = true;

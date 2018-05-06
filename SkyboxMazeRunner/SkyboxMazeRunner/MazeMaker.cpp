@@ -21,15 +21,15 @@ bool MazeMaker::LoadMazeFromFile(std::string filename)
 	{
 		if (!dimensionsParsed)
 		{
-			if (m_Width == 0)
+			if (mWidth == 0)
 			{
-				m_Width = atoi(line.c_str());//col
+				mWidth = atoi(line.c_str());//col
 			}
 			else
 			{
-				m_Height = atoi(line.c_str());//row
+				mHeight = atoi(line.c_str());//row
 				dimensionsParsed = true;
-				InitDataStructure(m_Height, m_Width);
+				InitDataStructure(mHeight, mWidth);
 			}
 		}
 		else
@@ -40,21 +40,18 @@ bool MazeMaker::LoadMazeFromFile(std::string filename)
 				switch (current)
 				{
 				case 0:
-					m_Maze[rowCount][colCount] = 0;
+					mMaze[rowCount][colCount] = 0;
 					break;
 				case 1:
-					m_Maze[rowCount][colCount] = 1;
-					//std::cout << " ";
+					mMaze[rowCount][colCount] = 1;
 					break;
 				case 2:
-					m_Maze[rowCount][colCount] = 2;
-					m_StartingPosition = DirectX::SimpleMath::Vector3(rowCount, 0, colCount);//based on wall-width
-					//std::cout << "S";
+					mMaze[rowCount][colCount] = 2;
+					mStartingPosition = DirectX::SimpleMath::Vector3(rowCount, 0, colCount);//based on wall-width
 					break;
 				case 3:
-					m_Maze[rowCount][colCount] = 3;
-					m_EndPosition = DirectX::SimpleMath::Vector3(rowCount, 0, colCount);//based on wall-width 
-					//std::cout << "E"
+					mMaze[rowCount][colCount] = 3;
+					mEndPosition = DirectX::SimpleMath::Vector3(rowCount, 0, colCount);//based on wall-width
 					break;
 				}
 
@@ -78,17 +75,17 @@ bool MazeMaker::LoadMazeFromFile(std::string filename)
 void MazeMaker::InitDataStructure(int rows, int cols)
 {
 	std::vector<std::vector<int>> maze(rows, std::vector<int>(cols, 0));
-	m_Maze = maze;
+	mMaze = maze;
 }
 
 void MazeMaker::GenerateMazeWalls()
 {
-	for (int i = 0; i < m_Size + 2; ++i)
+	for (int i = 0; i < mSize + 2; ++i)
 	{
-		m_Maze[0][i] = 1;
-		m_Maze[m_Size + 1][i] = 1;
-		m_Maze[i][0] = 1;
-		m_Maze[i][m_Size + 1] = 1;
+		mMaze[0][i] = 1;
+		mMaze[mSize + 1][i] = 1;
+		mMaze[i][0] = 1;
+		mMaze[i][mSize + 1] = 1;
 	}
 }
 
@@ -142,14 +139,14 @@ void MazeMaker::Divide(int x, int y, int width, int height, bool horizontal)
 		{
 			if (wallX != pathX)
 			{
-				m_Maze[wallY][wallX] = 1;
+				mMaze[wallY][wallX] = 1;
 			}
 		}
 		else
 		{
 			if (wallY != pathY)
 			{
-				m_Maze[wallY][wallX] = 1;
+				mMaze[wallY][wallX] = 1;
 			}
 		}
 
@@ -196,7 +193,7 @@ bool MazeMaker::ChooseOrientation(int width, int height)
 
 void MazeMaker::BuildMaze()
 {
-	Divide(1, 1, m_Size, m_Size, ChooseOrientation(m_Size, m_Size));
+	Divide(1, 1, mSize, mSize, ChooseOrientation(mSize, mSize));
 	GenerateStartAndEnd();
 }
 
@@ -225,7 +222,7 @@ void MazeMaker::GenerateStartAndEnd()
 	}
 
 	startWall = 1;
-	endWall = m_Size;
+	endWall = mSize;
 
 	// Place the start and end
 	int randStartPos, randEndPos;
@@ -234,51 +231,51 @@ void MazeMaker::GenerateStartAndEnd()
 	{
 		do
 		{
-			randStartPos = std::rand() % m_Size;
-		} while (m_Maze[startWall][randStartPos] == 1);
+			randStartPos = std::rand() % mSize;
+		} while (mMaze[startWall][randStartPos] == 1);
 
 		do
 		{
-			randEndPos = std::rand() % m_Size;
-		} while (m_Maze[endWall][randEndPos] == 1);
+			randEndPos = std::rand() % mSize;
+		} while (mMaze[endWall][randEndPos] == 1);
 
-		m_StartingPosition.x = randStartPos;
-		m_StartingPosition.z = startWall;
-		m_Maze[m_StartingPosition.x][m_StartingPosition.z] = 2;
+		mStartingPosition.x = randStartPos;
+		mStartingPosition.z = startWall;
+		mMaze[mStartingPosition.x][mStartingPosition.z] = 2;
 
-		m_EndPosition.x = randEndPos;
-		m_EndPosition.z = endWall;
-		m_Maze[m_EndPosition.x][m_EndPosition.z] = 3;
+		mEndPosition.x = randEndPos;
+		mEndPosition.z = endWall;
+		mMaze[mEndPosition.x][mEndPosition.z] = 3;
 	}
 	else
 	{
 		do
 		{
-			randStartPos = std::rand() % m_Size;
-		} while (m_Maze[randStartPos][startWall] == 1);
+			randStartPos = std::rand() % mSize;
+		} while (mMaze[randStartPos][startWall] == 1);
 
 		do
 		{
-			randEndPos = std::rand() % m_Size;
-		} while (m_Maze[randEndPos][endWall] == 1);
+			randEndPos = std::rand() % mSize;
+		} while (mMaze[randEndPos][endWall] == 1);
 
-		m_StartingPosition.x = randStartPos;
-		m_StartingPosition.z = startWall;
-		m_Maze[m_StartingPosition.x][m_StartingPosition.z] = 2;
+		mStartingPosition.x = randStartPos;
+		mStartingPosition.z = startWall;
+		mMaze[mStartingPosition.x][mStartingPosition.z] = 2;
 
-		m_EndPosition.x = randEndPos;
-		m_EndPosition.z = endWall;
-		m_Maze[m_EndPosition.x][m_EndPosition.z] = 3;
+		mEndPosition.x = randEndPos;
+		mEndPosition.z = endWall;
+		mMaze[mEndPosition.x][mEndPosition.z] = 3;
 	}
 }
 
 void MazeMaker::PrintMaze()
 {
-	for (int row = 0; row < m_Size + 2; ++row)
+	for (int row = 0; row < mSize + 2; ++row)
 	{
-		for (int col = 0; col < m_Size + 2; ++col)
+		for (int col = 0; col < mSize + 2; ++col)
 		{
-			std::cout << m_Maze[row][col] << " ";
+			std::cout << mMaze[row][col] << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -291,11 +288,11 @@ void MazeMaker::NewMaze(int mazeSize)
 		++mazeSize;
 	}
 
-	m_Size = mazeSize;
-	m_Width = m_Size + 2;
-	m_Height = m_Size + 2;
+	mSize = mazeSize;
+	mWidth = mSize + 2;
+	mHeight = mSize + 2;
 
-	InitDataStructure(m_Height, m_Width);
+	InitDataStructure(mHeight, mWidth);
 	GenerateMazeWalls();
 	BuildMaze();
 }

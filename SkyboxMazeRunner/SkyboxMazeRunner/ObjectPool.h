@@ -9,18 +9,18 @@ template<class T>
 class ObjectPool
 {
 	private:
-		std::vector<T> mObjects;
+		std::vector<T> m_Objects;
 
 
 	public:
 		ObjectPool<T>()
 		{
-			mObjects.reserve(100);
+			m_Objects.reserve(100);
 		}
 
 		ObjectPool<T>(size_t size)
 		{
-			mObjects.reserve(size);
+			m_Objects.reserve(size);
 		}
 
 		~ObjectPool<T>() {}
@@ -33,34 +33,34 @@ template<>
 class ObjectPool<Wall*>
 {
 private:
-	size_t mPoolSize = 128;
-	std::vector<Wall*> mObjects;
-	std::vector<__int8> mObjectsInUse;
+	size_t m_PoolSize = 128;
+	std::vector<Wall*> m_Objects;
+	std::vector<__int8> m_ObjectsInUse;
 
 	void Expand();
 
 public:
 	ObjectPool()
 	{
-		mObjects.reserve(mPoolSize);
-		mObjectsInUse.reserve(mPoolSize);
-		for (int i = 0; i < mPoolSize; ++i)
+		m_Objects.reserve(m_PoolSize);
+		m_ObjectsInUse.reserve(m_PoolSize);
+		for (int i = 0; i < m_PoolSize; ++i)
 		{
-			mObjects.emplace_back(new Wall());
-			mObjectsInUse.push_back(0);
+			m_Objects.emplace_back(new Wall());
+			m_ObjectsInUse.push_back(0);
 		}
 	}
 
 	ObjectPool(size_t size)
 	{
-		mObjects.reserve(size);
+		m_Objects.reserve(size);
 	}
 
 	~ObjectPool() 
 	{
-		for (int i = 0; i < mPoolSize; ++i)
+		for (int i = 0; i < m_PoolSize; ++i)
 		{
-			delete mObjects[i];
+			delete m_Objects[i];
 		}
 	}
 
