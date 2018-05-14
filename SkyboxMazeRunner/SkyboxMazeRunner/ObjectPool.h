@@ -9,13 +9,21 @@ template<class T>
 class ObjectPool
 {
 	private:
-		std::vector<T> m_Objects;
-
+		size_t m_PoolSize = 128;
+		std::vector<T*> m_Objects;
+		std::vector<__int8> m_ObjectsInUse;
+		
+		void Expand();
 
 	public:
 		ObjectPool<T>()
 		{
-			m_Objects.reserve(100);
+			m_Objects.reserve(m_PoolSize);
+			m_ObjectsInUse.reserve(m_PoolSize);
+			for (int i = 0; i < m_PoolSize; ++i)
+			{
+				m_Objects.emplace_back(new T());
+			}
 		}
 
 		ObjectPool<T>(size_t size)
@@ -23,7 +31,22 @@ class ObjectPool
 			m_Objects.reserve(size);
 		}
 
-		~ObjectPool<T>() {}
+		~ObjectPool<T>() 
+		{
+			for (int i = 0; i < m_PoolSize; ++i)
+			{
+				delete m_Objects[i];
+			}
+		}
+
+		ObjectPool(const ObjectPool& other) = delete;
+		ObjectPool(ObjectPool&& other) = delete;
+		ObjectPool& operator=(const ObjectPool& other) = delete;
+		ObjectPool& operator=(ObjectPool&& other) = delete;
+
+
+		T* GetNext();
+		void Return(T* t);
 
 };
 

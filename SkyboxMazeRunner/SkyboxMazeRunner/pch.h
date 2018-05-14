@@ -45,7 +45,6 @@
 #include <stdexcept>
 
 // Should only be using the ones I need; go back later and clean up
-//#include "Audio.h"
 #include "CommonStates.h"
 #include "DDSTextureLoader.h"
 #include "DirectXHelpers.h"
@@ -65,7 +64,6 @@
 #include "VertexTypes.h"
 #include "WICTextureLoader.h"
 #include <DirectXCollision.h>
-
 #include "Helpers.h"
 
 namespace DX
@@ -79,3 +77,6 @@ namespace DX
         }
     }
 }
+
+using namespace DirectX;
+using namespace DirectX::SimpleMath;

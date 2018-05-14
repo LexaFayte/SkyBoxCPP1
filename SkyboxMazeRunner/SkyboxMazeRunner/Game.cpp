@@ -9,14 +9,7 @@
 
 extern void ExitGame();
 
-using namespace DirectX;
-using namespace DirectX::SimpleMath;
-
 using Microsoft::WRL::ComPtr;
-
-XMGLOBALCONST XMVECTORF32 DeepDarkGray = { { { 0.150000000f, 0.150000000f, 0.150000000f, 1.000000000f } } };
-static const float ROTATION_GAIN = 0.004f;
-static const float MOVEMENT_GAIN = 0.07f;
 
 Game::Game() :
 	m_window(nullptr),
@@ -35,8 +28,8 @@ void Game::Initialize(HWND window, int width, int height)
 	m_CollidableEntities.reserve(256);
 	m_Maze.NewMaze(11);
 	Vector3 mazeStart = m_Maze.getStartPosition();
-	m_StartPosition = Vector3(mazeStart.x * (200 * 0.06f), 2.0f, mazeStart.z *(200 * 0.06f));
-
+	m_StartPosition = Vector3(mazeStart.x * Constants::k_ModelPositionModifier, 2.0f, mazeStart.z * Constants::k_ModelPositionModifier);
+	
     CreateDevice();
 
     CreateResources();
@@ -96,7 +89,6 @@ void Game::Update(DX::StepTimer const& timer)
 
 		m_mouse->SetMode(Mouse::MODE_RELATIVE);
 
-		//only check if collisions are enabled
 		if (mCollisionsEnabled)
 		{
 			ProcessCollisions();
@@ -209,7 +201,7 @@ void Game::Render()
 
 void Game::Clear()
 {
-    m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), DeepDarkGray);
+    m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), Constants::k_ColorDeepDarkGray);
     m_d3dContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     m_d3dContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
@@ -417,7 +409,7 @@ void Game::CreateResources()
     DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 	
     
-	m_Camera = std::make_unique<Camera>(m_StartPosition, SimpleMath::Vector3(0, 0, 0),
+	m_Camera = std::make_unique<Camera>(m_StartPosition, Vector3(0, 0, 0),
 		float(backBufferWidth) / float(backBufferHeight), backBufferWidth, backBufferHeight);
 
 	m_FontPos.x = backBufferWidth / 2.0f;
@@ -434,10 +426,8 @@ void Game::OnDeviceLost()
 	m_states.reset();
 	m_fxFactory.reset();	
 	m_AssetManager.Reset();
-
 	m_Font.reset();
     CreateDevice();
-
     CreateResources();
 }
 

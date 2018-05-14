@@ -22,9 +22,9 @@ void EndPoint::Render(ID3D11DeviceContext* dc, const DirectX::CommonStates &stat
 			lights->SetLightEnabled(0, true);
 			lights->SetLightEnabled(1, false);
 			lights->SetLightEnabled(2, false);
-			lights->SetAmbientLightColor(Colors::Gold);
-			lights->SetLightDiffuseColor(0, Colors::Gold);
-			lights->SetLightDiffuseColor(1, Colors::Gold);
+			lights->SetAmbientLightColor(Colors::WhiteSmoke);
+			lights->SetLightDiffuseColor(0, Colors::WhiteSmoke);
+			lights->SetLightDiffuseColor(1, Colors::WhiteSmoke);
 		}
 	});
 	m_Model.Draw(dc, states, m_World, view, proj);
@@ -54,7 +54,7 @@ void EndPoint::Update(float deltaTime)
 	}
 
 
-	m_World = Matrix::CreateRotationY(cosf(deltaTime) * 2.f) * Matrix::CreateTranslation(m_Position);
+	m_World = Matrix::CreateRotationY(1.5f*deltaTime) * Matrix::CreateTranslation(m_Position);
 }
 
 void EndPoint::SetModel(Model& m)
@@ -66,5 +66,5 @@ void EndPoint::SetModel(Model& m)
 
 Vector3 EndPoint::ConvertPosition(int x, int z)
 {
-	return Vector3(x * (200 * 0.06f), m_PositonY, z * (200 * 0.06f));
+	return Vector3(x * Constants::k_ModelPositionModifier, m_PositonY, z * Constants::k_ModelPositionModifier);
 }

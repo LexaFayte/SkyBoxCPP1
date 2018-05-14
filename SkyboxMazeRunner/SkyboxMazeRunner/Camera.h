@@ -1,6 +1,5 @@
 #pragma once
 #include "pch.h"
-using namespace DirectX;
 
 class Camera
 {
@@ -9,46 +8,46 @@ private:
 	void CalculateView();
 
 public:
-	Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH);
+	Camera(Vector3 pos, Vector3 rot, float aspectRatio, int VPW, int VPH);
 	~Camera();
 
 	// Get/Set
-	SimpleMath::Vector3 getLookAt()
+	Vector3 getLookAt()
 	{
-		return mLookAt;
+		return m_LookAt;
 	}
 
-	SimpleMath::Matrix getView() 
+	Matrix getView() 
 	{
-		return mView;
+		return m_View;
 	}
 
-	SimpleMath::Vector3 getPosition() const noexcept
+	Vector3 getPosition() const noexcept
 	{
-		return mPosition;
+		return m_Position;
 	}
 
-	void SetPosition(SimpleMath::Vector3& position)
+	void SetPosition(Vector3& position)
 	{
-		mPosition = position;
-		mBoundingSphere.sphere.Center = mPosition;
-		mPreviewMove = mPosition;
+		m_Position = position;
+		m_BoundingSphere.sphere.Center = m_Position;
+		m_PreviewMove = m_Position;
 	}
 
-	SimpleMath::Matrix getProj() const noexcept
+	Matrix getProj() const noexcept
 	{
-		return mProj;
+		return m_Proj;
 	}
 
-	SimpleMath::Vector3 const getPreviewMove() const
+	Vector3 const getPreviewMove() const
 	{
-		return mPreviewMove;
+		return m_PreviewMove;
 	}
 
 
 	CollisionSphere& getCollisionSphere()
 	{
-		return mBoundingSphere;
+		return m_BoundingSphere;
 	}
 
 	void Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState, const GamePad::State& gamepadState);
@@ -56,31 +55,31 @@ public:
 	void handleCollision(SimpleMath::Vector3 nttPos);
 
 private:
-	const float kMoveSpeed = 0.30f;
-	const float kMouseRotationSpeed = 0.007f;
-	const float kGamePadRotationSpeed = 0.05f;
-	const float kNearZ = 0.1f;
-	const float kFarZ = 1000.0f;
-	const float kRadius = 0.5f;
+	const float k_MoveSpeed = 0.30f;
+	const float k_MouseRotationSpeed = 0.007f;
+	const float k_GamePadRotationSpeed = 0.05f;
+	const float k_NearZ = 0.1f;
+	const float k_FarZ = 1000.0f;
+	const float k_Radius = 0.5f;
 
-	SimpleMath::Vector3 mPosition = SimpleMath::Vector3::Zero;
-	SimpleMath::Vector3 mRotation = SimpleMath::Vector3::Zero;
-	SimpleMath::Vector3 mLookAt = SimpleMath::Vector3::Zero;
-	float mYaw = 0.0f;
-	float mPitch = 0.0f;
+	Vector3 m_Position = Vector3::Zero;
+	Vector3 m_Rotation = Vector3::Zero;
+	Vector3 m_LookAt = Vector3::Zero;
+	float m_Yaw = 0.0f;
+	float m_Pitch = 0.0f;
 
-	SimpleMath::Vector3 mPreviewMove = SimpleMath::Vector3::Zero;
-	SimpleMath::Vector3 mPreviousPos = SimpleMath::Vector3::Zero;
+	Vector3 m_PreviewMove = Vector3::Zero;
+	Vector3 m_PreviousPos = Vector3::Zero;
 
-	SimpleMath::Matrix mView = SimpleMath::Matrix::Identity;
-	SimpleMath::Matrix mProj = SimpleMath::Matrix::Identity;
+	Matrix m_View = Matrix::Identity;
+	Matrix m_Proj = Matrix::Identity;
 	
-	int mViewPortWidth;
-	int mViewPortHeight;
-	float mFOV = 70.0f;
-	float mAspectRatio;
+	int m_ViewPortWidth;
+	int m_ViewPortHeight;
+	float m_FOV = 70.0f;
+	float m_AspectRatio;
 
-	CollisionSphere mBoundingSphere;
+	CollisionSphere m_BoundingSphere;
 
 	inline float clamp(float x, float a, float b)
 	{
