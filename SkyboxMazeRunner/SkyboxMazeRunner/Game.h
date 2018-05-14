@@ -71,7 +71,7 @@ private:
 	std::unique_ptr<Floor> m_Floor;
 
 	AssetManager m_AssetManager;
-	SimpleMath::Vector2 m_FontPos;
+	Vector2 m_FontPos;
 
 
 	MazeMaker m_Maze;
@@ -80,7 +80,7 @@ private:
 	std::vector<Entity*> m_CollidableEntities;
 	ObjectPool<Wall*> m_Walls;
 
-	SimpleMath::Vector3 m_StartPosition = SimpleMath::Vector3::Zero;
+	Vector3 m_StartPosition = Vector3::Zero;
 	bool mCollisionsEnabled = true;
 	bool m_Collision = false;
 	bool m_GameEnd = false;

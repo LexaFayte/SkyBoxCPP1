@@ -2,58 +2,58 @@
 #include "Camera.h"
 #include <algorithm>
 
-Camera::Camera(SimpleMath::Vector3 pos, SimpleMath::Vector3 rot, float aspectRatio, int VPW, int VPH) :
-	mPosition(pos), mAspectRatio(aspectRatio), mViewPortWidth(VPW), mViewPortHeight(VPH)
+Camera::Camera(Vector3 pos, Vector3 rot, float aspectRatio, int VPW, int VPH) :
+	m_Position(pos), m_AspectRatio(aspectRatio), m_ViewPortWidth(VPW), m_ViewPortHeight(VPH)
 {
-	mView = SimpleMath::Matrix::CreateLookAt(SimpleMath::Vector3(2.0f, 2.0f, 2.0f),
-		SimpleMath::Vector3::Zero, SimpleMath::Vector3::UnitY);
+	m_View = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
+		Vector3::Zero, Vector3::UnitY);
 
-	mProj = SimpleMath::Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(mFOV), float(mViewPortWidth) / float(mViewPortHeight), kNearZ, kFarZ);
-	mBoundingSphere.sphere.Center = pos;
-	mBoundingSphere.sphere.Radius = kRadius;
-	mBoundingSphere.collision = DISJOINT;
+	m_Proj = Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(m_FOV), float(m_ViewPortWidth) / float(m_ViewPortHeight), k_NearZ, k_FarZ);
+	m_BoundingSphere.sphere.Center = pos;
+	m_BoundingSphere.sphere.Radius = k_Radius;
+	m_BoundingSphere.collision = DISJOINT;
 }
 
 Camera::~Camera() {};
 
 void Camera::CalculateLookAt()
 {
-	float y = sinf(mPitch);
-	float r = cosf(mPitch);
-	float z = r * cosf(mYaw);
-	float x = r * sinf(mYaw);	
+	float y = sinf(m_Pitch);
+	float r = cosf(m_Pitch);
+	float z = r * cosf(m_Yaw);
+	float x = r * sinf(m_Yaw);	
 
-	mLookAt = mPosition + SimpleMath::Vector3(x, y, z);
+	m_LookAt = m_Position + Vector3(x, y, z);
 }
 
 void Camera::CalculateView()
 {
-	mView = SimpleMath::Matrix::CreateLookAt(mPosition, mLookAt, SimpleMath::Vector3::Up);
+	m_View = Matrix::CreateLookAt(m_Position, m_LookAt, Vector3::Up);
 }
 
 void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keyboardState, const GamePad::State& gamepadState)
 {
-	SimpleMath::Vector3 delta;
-	SimpleMath::Vector3 move = SimpleMath::Vector3::Zero;
+	Vector3 delta;
+	Vector3 move = Vector3::Zero;
 
 	if (gamepadState.IsConnected())
 	{
-		delta = SimpleMath::Vector3(float(gamepadState.thumbSticks.rightX), float(gamepadState.thumbSticks.rightY * -1), 0.0f) * kGamePadRotationSpeed;
+		delta = Vector3(float(gamepadState.thumbSticks.rightX), float(gamepadState.thumbSticks.rightY * -1), 0.0f) * k_GamePadRotationSpeed;
 
 
-		mPitch -= delta.y;
-		mYaw -= delta.x;
+		m_Pitch -= delta.y;
+		m_Yaw -= delta.x;
 
 		float limit = XM_PI / 2.0f - 0.01f;
-		mPitch = clamp(mPitch, -limit, limit);
+		m_Pitch = clamp(m_Pitch, -limit, limit);
 
-		if (mYaw > XM_PI)
+		if (m_Yaw > XM_PI)
 		{
-			mYaw -= XM_PI * 2.0f;
+			m_Yaw -= XM_PI * 2.0f;
 		}
-		else if (mYaw < -XM_PI)
+		else if (m_Yaw < -XM_PI)
 		{
-			mYaw += XM_PI * 2.0f;
+			m_Yaw += XM_PI * 2.0f;
 		}
 
 		move.x = gamepadState.thumbSticks.leftX * -1;
@@ -62,21 +62,21 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 	}
 	else
 	{
-		delta = SimpleMath::Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * kMouseRotationSpeed;
+		delta = Vector3(float(mouseState.x), float(mouseState.y), 0.0f) * k_MouseRotationSpeed;
 
-		mPitch -= delta.y;
-		mYaw -= delta.x;
+		m_Pitch -= delta.y;
+		m_Yaw -= delta.x;
 
 		float limit = XM_PI / 2.0f - 0.01f;
-		mPitch = clamp(mPitch, -limit, limit);
+		m_Pitch = clamp(m_Pitch, -limit, limit);
 
-		if (mYaw > XM_PI)
+		if (m_Yaw > XM_PI)
 		{
-			mYaw -= XM_PI * 2.0f;
+			m_Yaw -= XM_PI * 2.0f;
 		}
-		else if (mYaw < -XM_PI)
+		else if (m_Yaw < -XM_PI)
 		{
-			mYaw += XM_PI * 2.0f;
+			m_Yaw += XM_PI * 2.0f;
 		}
 
 		
@@ -102,56 +102,32 @@ void Camera::Update(const Mouse::State& mouseState, const Keyboard::State& keybo
 		}
 	}
 
-	SimpleMath::Quaternion q = SimpleMath::Quaternion::CreateFromYawPitchRoll(mYaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending
-	move = SimpleMath::Vector3::Transform(move, q);
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(m_Yaw, 0.0f, 0.0f);//pitch (param 2) set to zero to avoid ascending and descending
+	move = Vector3::Transform(move, q);
 
-	move *= kMoveSpeed;
+	move *= k_MoveSpeed;
 
-	//collision detection here
-	mPreviewMove = mPosition + move;
+	m_PreviewMove = m_Position + move;
 	CalculateLookAt();
 	CalculateView();
 }
 
 void Camera::Move()
 {
-	if (mPreviewMove != SimpleMath::Vector3::Zero)
+	if (m_PreviewMove != Vector3::Zero)
 	{
-		mPreviousPos = mPosition;
-		mPosition = mPreviewMove;
-		mBoundingSphere.sphere.Center = mPosition;
+		m_PreviousPos = m_Position;
+		m_Position = m_PreviewMove;
+		m_BoundingSphere.sphere.Center = m_Position;
 	}
 	CalculateLookAt();
 	CalculateView();
 }
 
-void Camera::handleCollision(SimpleMath::Vector3 nttPos)
+void Camera::handleCollision(Vector3 nttPos)
 {
-	//SimpleMath::Vector3 collisionMove = SimpleMath::Vector3::Zero;	
-	//SimpleMath::Vector3 relativePos = nttPos - mPosition;
-	
-	//float wallNormalX = 0;
-
-
-	//if (relativePos.x < 3.0f)
-	//{
-	//	//to the right of the wall
-	//	wallNormalX = 1.0f;
-	//}
-	//else
-	//{
-	//	//to the left of the wall
-	//	wallNormalX = -1.0f;
-	//}
-
-	//if (wallNormalX != 0)
-	//{
-	//	collisionMove.x += wallNormalX;
-	//}
-
-	//mPosition += collisionMove;
-	mPosition = mPreviousPos;
-	mBoundingSphere.sphere.Center = mPosition;
+	m_Position = m_PreviousPos;
+	m_BoundingSphere.sphere.Center = m_Position;
 
 	CalculateLookAt();
 	CalculateView();
