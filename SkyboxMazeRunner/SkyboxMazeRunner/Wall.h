@@ -1,14 +1,10 @@
 #pragma once
 #include "pch.h"
 #include "Entity.h"
-using namespace DirectX;
-using namespace SimpleMath;
 
 class Wall : public Entity
 {
 private:
-	float m_Width = 1.5f;
-	float m_Height = 3.0f;
 	BoundingBox m_AABB;
 	Vector3 m_Position = Vector3::Zero;
 	Matrix m_World = Matrix::Identity;
@@ -28,5 +24,4 @@ public:
 	virtual const Model& GetModel() override { return m_Model; };
 	virtual const BoundingBox& GetAABB() override { return m_AABB; };
 	void SetModel(Model m);
-
 };

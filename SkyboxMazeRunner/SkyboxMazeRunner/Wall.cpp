@@ -12,7 +12,7 @@ Wall::Wall(int x, int z) : Entity(EntityTag::Wall)
 
 Vector3 Wall::ConvertPosition(int x, int z)
 {
-	return Vector3(x *(200 * 0.06f), 0, z*(200 * 0.06f));
+	return Vector3(x * Constants::k_ModelPositionModifier, 0, z * Constants::k_ModelPositionModifier);
 }
 
 void Wall::SetModel(Model m)
@@ -22,7 +22,7 @@ void Wall::SetModel(Model m)
 	m_AABB.Center = m_Position;	
 }
 
-void Wall::Render(ID3D11DeviceContext* dc, const DirectX::CommonStates &states, Matrix view, SimpleMath::Matrix proj)
+void Wall::Render(ID3D11DeviceContext* dc, const CommonStates &states, Matrix view, Matrix proj)
 {
 	m_Model.UpdateEffects([](IEffect* effect)
 	{

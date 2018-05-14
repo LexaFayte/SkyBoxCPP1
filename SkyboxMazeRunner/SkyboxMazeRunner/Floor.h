@@ -1,7 +1,5 @@
 #pragma once
 #include "Entity.h"
-using namespace DirectX;
-using namespace SimpleMath;
 
 class Floor : public Entity
 {

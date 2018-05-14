@@ -26,8 +26,8 @@ private:
 	int m_FloatDirection = 1;
 	float m_PositonY = 2.0f;
 	DirectX::Model m_Model;
-	Vector3 m_Position = Vector3::Zero;
 	Matrix m_World = Matrix::Identity;
+	Vector3 m_Position = Vector3::Zero;
 	BoundingBox m_AABB;
 
 	Vector3 ConvertPosition(int x, int z);
